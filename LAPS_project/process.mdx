@@ -1,0 +1,14 @@
+Location: C:\Dev\laps-bot
+
+Install the tooling
+
+winget install Microsoft.Azure.FunctionsCoreTools --exact
+Install-Module Microsoft.Graph -Scope CurrentUser -Force
+
+close Powershell and restart Powershell again
+
+New-Item -ItemType Directory -Force -Path C:\Dev | Out-Null
+Copy-Item -Recurse -Force "$env:LOCALAPPDATA\Claude-Data\claude_pzs8sxrjxfjjc\local-agent-mode-sessions\e414ed28-f06d-45f9-b8e9-ea3400418155\31f6a92b-9ce9-4548-aa20-3b5d51439457\c87a7067\outputs\laps-bot" C:\Dev\
+cd C:\Dev\laps-bot
+Copy-Item local.settings.json.example local.settings.json
+func start

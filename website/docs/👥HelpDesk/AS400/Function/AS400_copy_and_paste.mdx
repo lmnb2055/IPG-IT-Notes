@@ -1,0 +1,55 @@
+---
+sidebar_label: Copy & Paste
+author: Sidney Chen
+created: 2026-10-21
+---
+
+# AS400: Copy and Paste Settings
+
+How to fix copy and paste between Excel and AS400, or within AS400, by changing the paste settings in the AS400 session.
+
+**Ticket reference:** 25253
+
+> **💡 Good to know:** How pasted data lands in AS400 depends on the session's paste preferences. The right settings depend on what the user copies from (Excel or AS400) and where it goes. If a colleague's copy and paste already works the way the user wants, copying that colleague's settings is often the quickest fix.
+
+## Steps
+
+1. In the AS400 session window, go to **Edit** → **Preferences** → **Edit**.
+2. Open the **Paste** tab (and **Cut/Copy** if needed).
+3. Set the options to match the user's scenario. Use the [settings table](#settings-by-scenario) and the [screenshots](#reference-screenshots) below.
+4. Click **OK**, then test the copy and paste with the user.
+
+If none of the scenarios fit, ask a colleague of the user whose copy and paste works, check their settings, and apply the same settings on the user's session.
+
+## Settings by Scenario
+
+Paste tab settings. ✅ = checked, — = unchecked or unavailable.
+
+| Setting | AS400 → AS400 | AS400 table → AS400 | Excel → AS400 | Excel (multiple columns) → AS400 |
+| --- | --- | --- | --- | --- |
+| Field Wrap | ✅ | — | ✅ | — |
+| Line Wrap | ✅ | — | — | — |
+| Do not split words during wrap | ✅ | — | — | — |
+| Wrap on line boundaries | — | — | — | — |
+| Paste to marked area | ✅ | — | ✅ | — |
+| Stop pasting when protected line encountered | — | — | — | — |
+| Move cursor to end of paste | — | — | — | ✅ |
+| **Tab character processing** | Replace with 1 space | Paste data to fields | Paste data to fields | Replace with 1 space |
+
+## Reference Screenshots
+
+### AS400 → AS400
+
+![Paste settings for copying AS400 to AS400](./png_files/copy-paste%20AS400%20to%20AS400.png)
+
+### AS400 table → AS400
+
+![Paste settings for copying an AS400 table to AS400](./png_files/copy-paste%20table%20AS400%20to%20AS400.png)
+
+### Excel → AS400
+
+![Paste settings for copying Excel to AS400](./png_files/copy-paste%20excel%20to%20AS400.png)
+
+### Excel (multiple columns) → AS400
+
+![Paste settings for copying multiple Excel columns to AS400](./png_files/copy-paste%20Excel%20to%20AS400%20multiple%20colums.png)
