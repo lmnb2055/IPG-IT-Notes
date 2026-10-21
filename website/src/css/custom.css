@@ -28,3 +28,15 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Author / created / updated line under doc titles (src/theme/MDXComponents.tsx) */
+.doc-meta {
+  margin-top: -0.75rem;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* The date is already shown under the title, so hide the footer copy */
+.theme-last-updated {
+  display: none;
+}
