@@ -1,5 +1,6 @@
-Reference Ticket: #25159
+# L Drive Issue
 
+Reference Ticket: #25159
 Main point: Not VPN issue, can access to P drive but unable to access to L drive.
 
 

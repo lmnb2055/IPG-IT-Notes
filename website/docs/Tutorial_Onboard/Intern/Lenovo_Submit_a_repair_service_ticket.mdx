@@ -1,0 +1,76 @@
+---
+sidebar_position: 8
+sidebar_label: Lenovo Repair Ticket
+---
+
+# Lenovo: Submit a Repair Service Ticket
+
+How to open a hardware repair request with Lenovo for a machine under warranty.
+
+> **💡 Good to know:** Lenovo repairs in-warranty machines at no cost to us, so always check warranty status before arranging a repair ourselves. Tickets are submitted through Lenovo's PC Support site using the device serial number, which pulls up the exact model and entitlement automatically.
+
+## Before You Start
+
+- Have the **serial number** ready, plus a clear description of the fault and what's been tried.
+- If the machine is out of warranty, stop here. See [Laptops: How to Check Warranty](./Laptops_How_to_Check_Warranty.mdx) first.
+
+## Steps
+
+### 1. Look up the device
+
+1. Go to [Lenovo Support](https://pcsupport.lenovo.com/us/en/).
+2. Enter the serial number in the search box and submit.
+   {/* Screenshot: 16dfd732-ef8d-4054-993b-dc0ae52c5b15.png */}
+3. On the **Product Home** page, confirm the model and warranty status (for example, *In Warranty, 19 days remaining*).
+
+> **Note:** The dropdown often shows "No suggestions match the term". That's normal for a serial number. Press **Enter** or click **View more results** to continue.
+
+### 2. Open the ticket
+
+1. Select **Contact Us** from the left menu.
+2. Click **Submit a New Ticket** → **Submit Now**.
+   {/* Screenshot: image-20261006-130121.png */}
+
+### 3. Fill in the request
+
+The form has five steps: **Discovery**, **Additional Info**, **Contact Details**, **Review**, and **Submission**.
+
+1. On **Discovery**, fill in:
+
+   | Field | Value |
+   | --- | --- |
+   | Problem Type | Hardware / Repair |
+   | Country/Region of Service | United States Of America |
+   | Serial Number | (pre-filled) |
+
+2. Confirm **"This machine is entitled"** appears, then click **Next**.
+3. On **Additional Info**, describe the fault.
+4. On **Contact Details**, use the Inteplast contact and address.
+5. Review and submit.
+   {/* Screenshot: image-20261006-130137.png */}
+
+### 4. Record the confirmation
+
+1. On **Submission Received**, copy the confirmation number (for example, `E04ASOJPAN`) into the Zoho ticket.
+2. To check status later, replace `<confirmation-number>` in this address with the real number:
+
+   ```text
+   https://support.lenovo.com/us/en/repairstatus?problemId=<confirmation-number>
+   ```
+
+   {/* Screenshot: image-20261006-133605.png */}
+
+**Expected result:** A confirmation number is issued, a confirmation email arrives within a few hours, and Lenovo calls back within 24 business hours if they need more information.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Serial returns no product | Typo, or wrong manufacturer. Verify the serial with `Get-CimInstance Win32_BIOS` in PowerShell. |
+| "This machine is entitled" doesn't appear | Out of warranty, or registered to another organization. Check **Fix Warranty Status**. |
+| No confirmation email | Check spam. The confirmation number alone is enough to track the request. |
+| No callback after 24 business hours | Call Premier Support with the confirmation number. |
+
+## Related
+
+- [Laptops: How to Check Warranty](./Laptops_How_to_Check_Warranty.mdx): confirm coverage before opening a ticket.

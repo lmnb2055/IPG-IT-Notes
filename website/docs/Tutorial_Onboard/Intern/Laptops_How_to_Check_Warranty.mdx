@@ -1,0 +1,46 @@
+---
+sidebar_position: 9
+sidebar_label: Warranty Check
+---
+
+# Laptops: How to Check Warranty
+
+How to look up whether a PC is still under manufacturer warranty.
+
+> **💡 Good to know:** Before repairing or replacing a failing machine, check whether the manufacturer still covers it. A device under warranty goes back to Lenovo or Dell for parts and labor. One that's out of warranty becomes our repair or replacement cost. All you need is the brand and the serial number.
+
+## Steps
+
+### 1. Get the serial number
+
+**From Intune**, when you don't have the machine in front of you:
+
+1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com/#home).
+2. Go to **Devices** → **All devices**.
+3. Select the Windows device.
+4. On the **Overview** page, find **Serial number**.
+
+**From PowerShell**, when you're on the device:
+
+```powershell
+Get-CimInstance Win32_BIOS | Select-Object SerialNumber
+```
+
+Both return the hardware serial from the BIOS. The sticker on the chassis works too, but it's often worn or unreadable.
+
+### 2. Check the warranty
+
+Go to the manufacturer's lookup page and enter the serial number:
+
+| Brand | Lookup page |
+| --- | --- |
+| Lenovo | [Lenovo Warranty Check](https://pcsupport.lenovo.com/us/en/warrantylookup) |
+| Dell | [Dell Support Services & Warranty](https://www.dell.com/support/home/en-us) |
+
+### 3. Record the result
+
+Record the warranty status on the Zoho ticket before deciding whether to repair, replace, or file a claim.
+
+## Related
+
+- [Lenovo: Submit a Repair Service Ticket](./Lenovo_Submit_a_repair_service_ticket.mdx): next step for a Lenovo machine that's in warranty.

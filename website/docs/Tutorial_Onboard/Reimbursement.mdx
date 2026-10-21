@@ -1,0 +1,42 @@
+---
+sidebar_label: Reimbursement
+---
+
+# Expense Reimbursement: Employee ACH
+
+How to get reimbursed for out-of-pocket IT purchases.
+
+> **💡 Good to know:** Reimbursements under $200 are prepared with a Claude skill that fills in the ACH form for you. Anything over $200 goes through Accounting instead. Either way, the IT manager signs before it's sent.
+
+> **⚠️ Do not start without the receipt as a PDF, with the total clearly visible.** A card statement line doesn't count.
+
+## Under $200
+
+1. Collect your receipt as a PDF with the total clearly visible.
+2. Go to Team Claude and run `/02-tracy-it-ach-reimbursement`.
+3. Answer the two prompts:
+
+   | Prompt | What to enter |
+   | --- | --- |
+   | Who's submitting this? | Your name, for example *Sidney Chen* |
+   | What was this for? | One short line, for example *IT team lunch – East Hanover* |
+
+4. Check what comes back: name, amount, purpose, and that the receipt is attached.
+5. Download it and send it to the IT manager for signature.
+
+> **Note:** The skill only fills in the form. Nothing is submitted until you email the signed packet.
+
+## Over $200
+
+1. Attach the Recommendation Report from your supervisor.
+2. Email iphqap@inteplast.com with Tracy cc'd.
+
+> **⚠️ Codes:** 0130 and IPHQ are the IT/HQ codes. Other departments and plants use different ones, so check with the Accounting department.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Wrong name or amount on the form | Re-run the skill with corrected input. |
+| Receipt missing from the packet | Re-upload it as a PDF and re-run the skill. |
+| Accounts payable returns the request | Usually a missing code or signature. Complete it and resubmit. |

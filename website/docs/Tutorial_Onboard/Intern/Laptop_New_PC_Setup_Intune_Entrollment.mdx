@@ -1,0 +1,60 @@
+---
+sidebar_position: 5
+sidebar_label: New PC Setup
+---
+
+# Laptop: New PC Setup & Intune Enrollment
+
+How to set up a new corporate laptop and enroll it in Intune before handing it to the user.
+
+> **💡 Good to know:** New machines are enrolled with a shared setup account and a temporary device name, then renamed to the standard convention once they appear in Intune. Enrollment applies compliance policies and deploys apps automatically, so Intune does most of the work.
+
+> **⚠️ Do not start unless the laptop is on Ethernet and plugged into power.** Enrollment pulls policies and updates; dropping off Wi-Fi mid-process leaves the device half-configured.
+
+## Before You Start
+
+You need the setup account credentials for the user's company. Get them from the IT password file or your lead. Never write them into this page.
+
+| Company | Setup account |
+| --- | --- |
+| Inteplast Group Headquarters | intunecgu@inteplast.com |
+| Inteplast Engineered Films | intunecgu@inteplastef.com |
+
+## Steps
+
+### 1. Prepare the hardware
+
+1. Connect the laptop to power and Ethernet.
+2. Enter the BIOS and confirm **Secure Boot** is **On**.
+
+### 2. Run through Windows setup
+
+1. At the device name prompt, enter a temporary name: `temp[date]-[time]` (for example, `temp0917-1430`).
+2. Sign in with the setup account for the user's company (see [Before You Start](#before-you-start)).
+
+> **Note:** The temporary name only has to be unique. The device gets its permanent name after it appears in Intune.
+
+### 3. Install Company Portal
+
+1. Open the **Microsoft Store** on the desktop.
+2. Search for **Company Portal** and install it.
+3. Open Company Portal and install the apps the user needs, such as Zoom, Office 365, and Chrome.
+
+### 4. Finish and rename
+
+1. Run **Windows Update** until the device is fully patched.
+2. In the [Intune admin center](https://intune.microsoft.com/#home), find the device by its temporary name.
+3. Rename it to the standard convention: [naming convention]
+4. Confirm the **primary user** is set to the person receiving the laptop.
+
+**Expected result:** The device shows in Intune as **Compliant**, under its permanent name, with the correct primary user assigned.
+
+## After Setup
+
+1. Email or message the user to let them know the laptop is ready for pickup.
+2. If the user has an existing computer, ask them to keep it while they test the new one. They should confirm they can do everything on the new laptop that they could on the old one.
+3. Once they confirm everything works, they return the old computer to IT.
+
+## Next Step
+
+Continue with [Laptop: Retrieve Local Administrator Password (LAPS)](./Laptop_Retrieve_Local_Administrator_Password_LAPS.mdx).
