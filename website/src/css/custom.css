@@ -36,6 +36,18 @@
   color: var(--ifm-color-emphasis-600);
 }
 
+/* Section label between sidebar groups (sidebarItemsGenerator in docusaurus.config.ts) */
+.sidebar-section-title {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-toc-border-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
 /* The date is already shown under the title, so hide the footer copy */
 .theme-last-updated {
   display: none;

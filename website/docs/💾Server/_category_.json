@@ -1,0 +1,10 @@
+{
+  "label": "💾Server",
+  "position": 6,
+  "customProps": {
+    "sectionTitle": "System"
+  },
+  "link": {
+    "type": "generated-index"
+  }
+}

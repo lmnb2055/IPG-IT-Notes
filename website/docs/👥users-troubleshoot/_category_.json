@@ -1,0 +1,10 @@
+{
+  "label": "👥users-troubleshoot",
+  "position": 5,
+  "customProps": {
+    "sectionTitle": "IT General"
+  },
+  "link": {
+    "type": "generated-index"
+  }
+}

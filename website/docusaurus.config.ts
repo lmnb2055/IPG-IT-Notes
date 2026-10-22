@@ -73,6 +73,25 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          // A category with `customProps.sectionTitle` in its _category_.json
+          // gets a section label above it in the sidebar.
+          async sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+            const items = await defaultSidebarItemsGenerator(args);
+            return items.flatMap((item) => {
+              const title =
+                'customProps' in item ? item.customProps?.sectionTitle : null;
+              if (typeof title !== 'string') return [item];
+              return [
+                {
+                  type: 'html',
+                  value: title,
+                  className: 'sidebar-section-title',
+                  defaultStyle: true,
+                },
+                item,
+              ];
+            });
+          },
           showLastUpdateTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -108,7 +127,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'My Job Notes',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -118,12 +137,12 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Knowledge Base',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          href: 'https://www.sidneychen.cc/contact',
+          label: 'Contact',
           position: 'right',
         },
       ],
