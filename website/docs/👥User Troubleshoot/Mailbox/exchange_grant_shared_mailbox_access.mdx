@@ -1,0 +1,57 @@
+---
+sidebar_label: Shared Mailbox Access
+author: Sidney Chen
+created: 2026-10-08
+---
+
+# Exchange: Grant Shared Mailbox Access
+
+How to give a user access to a shared mailbox and let them send from it.
+
+**Ticket reference:** #24928
+
+> **💡 Good to know:** Shared mailbox permissions come in two parts, set separately. **Full Access** lets someone open and read the mailbox. **Send on Behalf** lets them send from it, with their own name shown alongside the mailbox name. Granting one doesn't grant the other, so most requests need both.
+
+## Before You Start
+
+Confirm which sending behavior the user wants:
+
+| Permission | Recipients see | Best for |
+| --- | --- | --- |
+| Send on Behalf | "Flora Zhang on behalf of IPG HQ AP" | AP and finance mailboxes, since it keeps the sender visible |
+| Send As | Only the mailbox address | Cases where the user's name should be hidden |
+
+## Steps
+
+### 1. Open the shared mailbox
+
+1. Open the [Exchange admin center](https://admin.exchange.microsoft.com).
+2. Go to **Recipients** → **Mailboxes**.
+3. Open the shared mailbox (for example, ipgapip@inteplast.com).
+4. Select **Mailbox delegation**.
+
+### 2. Grant Full Access (open and read the mailbox)
+
+1. Under **Full Access**, click **Add members**.
+2. Add the user and click **Save**.
+
+### 3. Grant Send on Behalf (send from the mailbox)
+
+1. Under **Send on Behalf**, click **Add members**.
+2. Add the user and click **Save**.
+
+**Expected result:** The mailbox appears in the user's Outlook, and the shared address can be selected in the **From** field when composing.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Mailbox doesn't appear in Outlook | Automapping can take up to an hour. Restart Outlook, or add the mailbox manually. |
+| Can open the mailbox but can't send from it | Only Full Access was granted. Add Send on Behalf. |
+| Send fails with a permissions error | The permission is still propagating. If it persists after an hour, re-check delegation. |
+| Recipients see the wrong sender name | Expected with Send on Behalf. Use Send As if the user's name should be hidden. |
+| Sent items land in the user's own mailbox | Change the shared mailbox's sent-items setting in Exchange. |
+
+## Related
+
+- [Outlook: Check Which Address You're Sending From](./outlook_check_which_address_you_are_sending_from.mdx)

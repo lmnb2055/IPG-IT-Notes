@@ -1,0 +1,191 @@
+---
+slug: security
+title: PHP2Shell Critical Vulnerabilities
+authors: [slorber]
+tags: [docusaurus]
+---
+
+snapshot - iphqwebnew_16.1 - 42
+
+vmware ESXi
+Host
+screenshots
+screenshots
+
+ipg.inteplast.com/wp-admin/
+ipga.inteplast.com/wp-admin/ [130.8]
+
+Webmin: 172.18.128.42:12321
+SQL: 172.18.128.42:12322
+
+PHP2Shell Critical Vulnerabilities（PHP2Shell 严重漏洞） 指的是攻击者利用 PHP 应用程序中的漏洞，在服务器上执行任意系统命令，最终获得服务器控制权（Shell Access）的高危安全问题。
+
+简单理解
+
+正常情况：
+
+Plain Text
+用户 → 网站 → PHP程序 → 返回网页
+
+攻击成功后：
+
+Plain Text
+黑客 → 网站漏洞 → PHP程序 → 执行系统命令
+↓
+获得服务器权限(Shell)
+
+例如攻击者可能执行：
+
+Shell
+whoami
+ipconfig
+net user
+powershell
+ 
+
+甚至：
+
+Shell
+ransomware.exe
+
+部署勒索软件。
+
+常见成因
+1. Remote Code Execution (RCE)
+
+PHP程序存在远程代码执行漏洞：
+
+PHP
+php
+eval($_GET['cmd']);
+
+攻击者访问：
+
+Plain Text
+http://website.com/test.php?cmd=system('whoami');
+
+服务器就会执行命令。
+
+2. 文件上传漏洞
+
+网站允许上传 PHP 文件：
+
+Plain Text
+shell.php
+
+上传后访问：
+
+Plain Text
+http://website.com/uploads/shell.php
+
+即可获得 Web Shell。
+
+3. 命令注入 (Command Injection)
+
+PHP代码：
+
+PHP
+system("ping " . $_GET['ip']);
+
+攻击者输入：
+
+Plain Text
+8.8.8.8 && whoami
+
+实际执行：
+
+Shell
+ping 8.8.8.8 && whoami
+
+从而执行额外命令。
+
+风险等级为什么是 Critical（严重）？
+
+因为攻击成功后，攻击者可能：
+
+✅ 获取服务器权限
+
+✅ 窃取数据库资料
+
+✅ 窃取 AD 凭据
+
+✅ 安装后门程序
+
+✅ 横向移动到其他服务器
+
+✅ 部署勒索软件
+
+✅ 完全控制网站
+
+因此通常 CVSS 分数会达到：
+
+Plain Text
+8.0 ~ 10.0
+
+属于最高危漏洞等级。
+
+IT 运维应该如何处理？
+立即确认影响范围
+
+检查：
+
+Shell
+php -v
+
+确认 PHP 版本。
+
+查看 Web 日志
+
+IIS：
+
+Plain Text
+C:\inetpub\logs\LogFiles
+
+Apache：
+
+Plain Text
+/var/log/apache2/
+ 
+
+Nginx：
+
+Plain Text
+/var/log/nginx/
+
+查看是否存在异常访问。
+
+查找可疑 PHP 文件
+
+Windows：
+
+PowerShell
+Get-ChildItem -Recurse *.php
+
+重点关注：
+
+Plain Text
+shell.php
+cmd.php
+upload.php
+test.php
+ 
+
+以及最近修改的文件。
+
+更新补丁
+
+升级：
+
+Plain Text
+PHP
+WordPress
+Drupal
+Joomla
+Laravel
+ThinkPHP
+
+到最新安全版本。
+
+给管理层的简单解释（中文版）
+
+PHP2Shell 漏洞是一种严重的远程代码执行漏洞。攻击者可利用网站程序缺陷，在服务器上执行系统命令并获取控制权，进而导致数据泄露、系统入侵、勒索软件部署等重大安全风险。建议立即进行漏洞验证、日志审计及安全修复工作，以确保服务器和业务系统安全。

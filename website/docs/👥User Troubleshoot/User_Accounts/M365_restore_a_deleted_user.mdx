@@ -1,0 +1,43 @@
+---
+sidebar_label: Restore Deleted User
+author: Sidney Chen
+created: 2026-10-21
+---
+
+# M365: Restore a Deleted User
+
+How to restore a deleted account and reassign the license so the mailbox works again.
+
+**Ticket reference:** #24826
+
+> **💡 Good to know:** Deleting a user in Microsoft 365 removes their mailbox access along with the account. The account stays in **Deleted users** for 30 days and can be restored with its data intact. After that, it's gone permanently. Restoring the account isn't enough on its own: the license has to be reassigned before mail works.
+
+> **⚠️ Do not start if more than 30 days have passed since deletion.** The account won't appear in Deleted users and can't be restored. Escalate instead.
+
+## Before You Start
+
+Confirm with the requester how long the account needs to stay active, and who approved it. Restoring a deleted account re-enables sign-in and mail flow, so it needs the same approval as creating a new one.
+
+## Steps
+
+1. Go to the [Microsoft 365 admin center](https://admin.microsoft.com) → **Users** → **Deleted users**.
+2. Search for the user and select them.
+3. Click **Restore user**.
+4. Go to **Active users** and find the restored account.
+5. Click the **⋯** menu → **Manage product licenses**.
+6. Under **Licenses and apps**, assign **Exchange Online (Plan 1)**.
+7. Click **Save**.
+
+**Expected result:** The user appears under **Active users** with a license assigned, and can sign in and reach their mailbox.
+
+> **Note:** Mailbox provisioning can take a little while after the license is assigned. If mail isn't reachable right away, wait and retest before troubleshooting.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| User not in Deleted users | Past the 30-day window, or deleted from Entra instead of M365. Escalate. |
+| Restored but can't sign in | No license assigned yet. Complete steps 5–7. |
+| Mailbox empty after restore | Still provisioning. Wait and retest before assuming data loss. |
+| No licenses available to assign | The tenant is out of seats. Purchase one, or free one from an inactive account. |
+| Restored but missing group access | Group memberships don't always come back. Re-add them manually. |

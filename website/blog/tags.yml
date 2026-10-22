@@ -17,3 +17,13 @@ hola:
   label: Hola
   permalink: /hola
   description: Hola tag description
+
+security:
+  label: Security
+  permalink: /security
+  description: Security alerts, investigations, and hardening notes
+
+vulnerability:
+  label: Vulnerability
+  permalink: /vulnerability
+  description: Vulnerability checks and findings

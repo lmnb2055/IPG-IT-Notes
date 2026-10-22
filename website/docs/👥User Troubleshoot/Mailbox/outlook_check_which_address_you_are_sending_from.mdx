@@ -1,0 +1,34 @@
+---
+sidebar_label: Check Sending Address
+author: Sidney Chen
+created: 2026-10-21
+---
+
+# Outlook: Check Which Address You're Sending From
+
+How to see and change the sender address on an outgoing message.
+
+> **💡 Good to know:** When someone has access to a shared mailbox, Outlook doesn't always make it obvious which address a message will go out from. The **From** field is hidden by default. Turning it on shows the sender address and lets the user switch between their own address and any shared mailbox they have rights to.
+
+## Steps
+
+1. Click **New Email**.
+2. Go to the **Options** tab.
+3. Click **From**. A **From** line appears above the **To** field, showing the address Outlook will send from.
+4. To change it, click the **From** dropdown and select the shared mailbox (for example, *IPG HQ AP*).
+
+**Expected result:** The **From** field stays visible on new messages, and the correct sender address is selected before sending.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Shared mailbox not in the **From** dropdown | No send permission. See [Exchange: Grant Shared Mailbox Access](./exchange_grant_shared_mailbox_access.mdx). |
+| Mailbox listed but sending fails | The permission is still propagating. If it persists after an hour, re-check delegation. |
+| Recipients see "[Name] on behalf of [Mailbox]" | Expected with Send on Behalf. Use Send As if the name should be hidden. |
+| **From** field disappears on the next message | In some Outlook versions it's per message. Turn it on again under **Options**. |
+| Replies go out from the wrong address | Outlook replies from the account that received the email. Check **From** before sending. |
+
+## Related
+
+- [Exchange: Grant Shared Mailbox Access](./exchange_grant_shared_mailbox_access.mdx)

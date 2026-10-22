@@ -1,8 +1,34 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import {execFile} from 'node:child_process';
+import {stat} from 'node:fs/promises';
+import {promisify} from 'node:util';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const run = promisify(execFile);
+
+async function git(args: string[]): Promise<string> {
+  try {
+    const {stdout} = await run('git', args);
+    return stdout.trim();
+  } catch {
+    return '';
+  }
+}
+
+// "Updated" date for docs: a file with uncommitted edits uses its modified
+// time, otherwise the date of its last git commit. Also used by `npm start`,
+// where Docusaurus would otherwise show a hardcoded 2018 date.
+async function getFileLastUpdateInfo(filePath: string) {
+  if (await git(['status', '--porcelain', '--', filePath])) {
+    const {mtimeMs} = await stat(filePath);
+    return {timestamp: Math.round(mtimeMs), author: ''};
+  }
+  const seconds = await git(['log', '-1', '--format=%ct', '--', filePath]);
+  return seconds ? {timestamp: Number(seconds) * 1000, author: ''} : null;
+}
 
 const config: Config = {
   title: 'My Site',
@@ -12,6 +38,12 @@ const config: Config = {
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    experimental_vcs: {
+      initialize: () => {},
+      // Creation date comes from the `created` front matter instead.
+      getFileCreationInfo: async (_filePath: string) => null,
+      getFileLastUpdateInfo,
+    },
   },
 
   // Set the production url of your site here

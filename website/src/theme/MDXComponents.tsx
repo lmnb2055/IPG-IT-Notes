@@ -11,13 +11,18 @@ function useDocSafe() {
   }
 }
 
-function formatDate(value: unknown, timeZone?: string): string | null {
+function parseDate(value: unknown): Date | null {
   if (!value) return null;
   const date =
     typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
       ? new Date(`${value}T00:00:00Z`)
       : new Date(value as string | number | Date);
-  if (isNaN(date.getTime())) return null;
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(value: unknown, timeZone?: string): string | null {
+  const date = parseDate(value);
+  if (!date) return null;
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -26,18 +31,35 @@ function formatDate(value: unknown, timeZone?: string): string | null {
   });
 }
 
+// Used when a doc has no `created` front matter.
+const DEFAULT_CREATED = '2026-10-21';
+
+// Calendar day as a sortable YYYY-MM-DD string.
+function dayKey(value: unknown, timeZone?: string): string | null {
+  const date = parseDate(value);
+  return date ? date.toLocaleDateString('en-CA', {timeZone}) : null;
+}
+
 // Author, created date and last-updated date, shown under the page title.
 function DocMeta() {
   const doc = useDocSafe();
   if (!doc) return null;
   const {frontMatter, metadata} = doc;
-  const {author, created} = frontMatter as {author?: string; created?: unknown};
+  const {author, created = DEFAULT_CREATED} = frontMatter as {
+    author?: string;
+    created?: unknown;
+  };
+
+  // Only show "Updated" for a change made after the created day.
+  const createdDay = dayKey(created, 'UTC');
+  const updatedDay = dayKey(metadata.lastUpdatedAt);
+  const showUpdated =
+    updatedDay !== null && (createdDay === null || updatedDay > createdDay);
 
   const parts = [
     author && `By ${author}`,
     formatDate(created, 'UTC') && `Created ${formatDate(created, 'UTC')}`,
-    formatDate(metadata.lastUpdatedAt) &&
-      `Updated ${formatDate(metadata.lastUpdatedAt)}`,
+    showUpdated && `Updated ${formatDate(metadata.lastUpdatedAt)}`,
   ].filter(Boolean);
 
   if (parts.length === 0) return null;
