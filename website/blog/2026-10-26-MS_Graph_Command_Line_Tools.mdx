@@ -1,0 +1,65 @@
+---
+slug: ms-graph-command-line-tools
+title: "Microsoft Graph Command-Line Tools"
+authors: [schen]
+tags: [microsoft365]
+date: 2026-10-26
+---
+
+Microsoft Graph provides command-line tools to interact with Microsoft 365 apps and automate tasks. This post covers setting up the **Microsoft Graph PowerShell SDK** and running your first commands.
+
+> **💡 Good to know:** Microsoft Graph is the single API behind Entra ID, Exchange, Teams, SharePoint and Intune. The PowerShell SDK wraps it in `Mg` cmdlets (for example `Get-MgUser`), so you can script admin tasks instead of clicking through each admin center.
+
+{/* truncate */}
+
+## Step 1: Install the Module
+
+Open PowerShell and install the SDK for your account:
+
+```powershell
+Install-Module Microsoft.Graph -Scope CurrentUser
+```
+
+Check it installed:
+
+```powershell
+Get-InstalledModule Microsoft.Graph
+```
+
+## Step 2: Connect
+
+Sign in with only the permissions (scopes) you need:
+
+```powershell
+Connect-MgGraph -Scopes "User.Read.All"
+```
+
+A browser sign-in window opens. The first time you use a scope, you may need to approve it, or have a Global Admin approve it.
+
+Confirm who you're signed in as:
+
+```powershell
+Get-MgContext
+```
+
+## Step 3: Run a Command
+
+List a few users:
+
+```powershell
+Get-MgUser -Top 5
+```
+
+Look up one user:
+
+```powershell
+Get-MgUser -UserId user@inteplast.com
+```
+
+## Step 4: Disconnect
+
+```powershell
+Disconnect-MgGraph
+```
+
+> **⚠️ Caution:** Ask for the smallest scopes that do the job. Scopes like `User.ReadWrite.All` or `Directory.ReadWrite.All` can change every account in the tenant.

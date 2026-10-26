@@ -1,0 +1,49 @@
+---
+sidebar_position: 1
+sidebar_label: Quick Install
+author: Sidney Chen
+created: 2026-10-08
+---
+
+# AS400: Quick Installation Guide
+
+Use this guide to install the AS400 client on a Windows computer and configure Windows Terminal so the application launches correctly.
+
+> **💡 Good to know:** AS400 gives access to the company's IBM i / AS400 environment. Install it from **Company Portal** first. Run the ACS installer from the IT share only when a manual install is needed.
+
+## Before You Start
+
+Set the Windows terminal application:
+
+1. Open **Settings** → **System** → **Advanced** → **Terminal**.
+2. Set the terminal application to **Windows Console Host**.
+
+**Expected result:** Windows Console Host is selected as the terminal application.
+
+## Which Method to Use
+
+| Method | Use when |
+| --- | --- |
+| [1. Company Portal](#method-1-company-portal) | Default; try this first |
+| [2. IT shared drive](#method-2-it-shared-drive) | AS400 isn't in Company Portal, or a manual install is needed |
+
+## Method 1: Company Portal
+
+1. Open **Company Portal**.
+2. Search for **AS400** and check whether it is available or already installed.
+3. Install it if needed.
+
+## Method 2: IT Shared Drive
+
+1. Go to the installer on the IT share:
+
+   ```text
+   ITShare\Programs\ACS\2026 ACS Installer\IBMiAccess_v1r1_1.1.9.5\Windows_Application\
+   ```
+
+2. Run `install_acs_64_allusers.js`.
+3. Follow the [ACS: Installation Guide](./ACS_installation_guide.mdx) to finish setting up AS400.
+
+## Verify
+
+Launch AS400 and confirm the application opens normally.

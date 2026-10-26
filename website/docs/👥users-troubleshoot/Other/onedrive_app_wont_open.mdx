@@ -1,0 +1,50 @@
+---
+sidebar_label: OneDrive Won't Open
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# OneDrive: App Won't Open or Sync
+
+OneDrive won't launch or sync because a policy value is blocking it.
+
+> **💡 Good to know:** The `DisableFileSyncNGSC` value under the Policies registry key turns OneDrive sync off entirely. The app simply won't start, with no clear error. Because the value sits under `SOFTWARE\Policies`, it's normally written by GPO or Intune, so a local edit is a temporary fix that reverts at the next policy refresh.
+
+## Before You Start
+
+> **⚠️ Caution:** This is a registry edit and needs a local admin account. Retrieve the LAPS password from Intune first: [Intune: Retrieve Local Administrator Password](../../tutorial-onboard/Intern/Laptop_Retrieve_Local_Administrator_Password_LAPS.mdx).
+
+> **ℹ️ Note:** This is a managed value. A local edit unblocks the user now, but the real fix is removing the device from whatever policy sets it.
+
+## Step 1: Immediate Unblock
+
+1. Sign in with the local admin account.
+2. Open **Registry Editor** (`regedit`).
+3. Go to:
+
+   ```text
+   HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive
+   ```
+
+4. Set `DisableFileSyncNGSC` to `0`, or delete the value.
+5. Sign back in as the user and launch OneDrive.
+
+## Step 2: Permanent Fix
+
+Find what's setting the value and remove the device from that assignment:
+
+| Source | How to check |
+| --- | --- |
+| Intune | Check configuration profiles and settings catalog policies assigned to the device's group. |
+| GPO | Run `gpresult /h report.html` and search the report for **OneDrive**. |
+
+**✅ Expected result:** OneDrive opens and syncs, and the value stays at `0` after a reboot and a policy refresh.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Value returns to `1` after reboot | The policy is re-applying. Fix it at the source, not on the machine. |
+| Key doesn't exist at all | Different cause. Check that OneDrive is installed and the user is licensed. |
+| Opens but won't sign in | Account or licensing issue, unrelated to this value. |
+| Several devices affected | The policy is scoped too broadly. Review the assignment group rather than fixing machine by machine. |

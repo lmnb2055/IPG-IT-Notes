@@ -27,3 +27,13 @@ vulnerability:
   label: Vulnerability
   permalink: /vulnerability
   description: Vulnerability checks and findings
+
+crowdstrike:
+  label: CrowdStrike
+  permalink: /crowdstrike
+  description: CrowdStrike Falcon detections and investigations
+
+microsoft365:
+  label: Microsoft 365
+  permalink: /microsoft365
+  description: Microsoft 365, Entra ID and Microsoft Graph notes

@@ -1,0 +1,39 @@
+---
+sidebar_position: 6
+sidebar_label: Data Transfer Add-in
+author: Sidney Chen
+created: 2026-10-05
+---
+
+# Excel: Enable the Data Transfer Add-in
+
+How to turn on the IBM i Data Transfer add-in inside Excel.
+
+> **💡 Good to know:** Data Transfer moves data between AS400 and Excel. It's the same function as the standalone **Data Transfer** shortcut on the desktop, but this version runs from inside Excel, which most users prefer once they know it's there. It ships with IBM i Access Client Solutions (ACS) but isn't enabled by default.
+
+## Before You Start
+
+1. ACS must already be installed. See [ACS: Installation Guide](./ACS_installation_guide.mdx).
+
+## Steps
+
+1. In Excel, go to **File** → **Options** → **Add-ins**.
+2. At the bottom, set **Manage** to **COM Add-ins** and click **Go**.
+3. Tick the **Data Transfer** add-in and click **OK**.
+4. Confirm it appears under the **Add-ins** tab in the ribbon, and have the user check that it loads.
+
+**Expected result:** The **Add-ins** tab shows Data Transfer, and the user can start a transfer from within Excel.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| No **Add-ins** tab after enabling | Restart Excel. |
+| Add-in missing from the COM list | ACS isn't installed, or it's the wrong bitness (32/64-bit) for this Excel build. |
+| Unticks itself after restart | Excel disabled it after a crash. Re-enable it under **Manage: Disabled Items**. |
+
+## Related
+
+- [ACS: Installation Guide](./ACS_installation_guide.mdx)
+- [Laptop: Add AS400 Shortcuts](./add_shortcuts.mdx): the standalone Data Transfer shortcut
+- [Excel: ODBC Data Source Name Not Found](./ODBC_data_source_name_not_found.mdx)

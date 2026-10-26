@@ -1,0 +1,65 @@
+---
+sidebar_label: PHP2Shell Patch
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# enteliWEB: Patch the PHP2Shell Vulnerability
+
+For IT staff patching the enteliWEB server against PHP2Shell (ticket 25352).
+
+> **⚠️ Critical vulnerability:** PHP2Shell (CVE-2026-109618, CVE-2026-109619) affects PHP and could let an attacker take control of a vulnerable system. enteliWEB runs on PHP, so its server must be patched.
+
+## Vendor Notice (Summary)
+
+| Item | What to do |
+| --- | --- |
+| enteliWEB 4.29 – 4.33 | Download **Patch PHP 4.29+**, extract it, and run `patch.bat` as administrator on the enteliWEB server. |
+| enteliWEB below 4.29 | Update enteliWEB to 4.29 or later **first**, then apply the patch. |
+| V4 devices (built-in web server) | No fix yet; the vendor is working on new firmware. Until then, **do not expose the control subnet to the Internet**. |
+
+<details>
+<summary>Original vendor email</summary>
+
+> Hi Tracy
+>
+> A critical vulnerability dubbed PHP2Shell is currently affecting PHP, a technology used by many websites and web applications. It is associated with vulnerabilities CVE-2026-109618 and CVE-2026-109619 and could allow an attacker to take control of a vulnerable system.
+>
+> Regarding enteliWEB installations, the manufacturer is aware of the situation and has produced a patch applicable for enteliWEB versions 4.29 to 4.33. Download link: Patch PHP 4.29+. On the affected server, simply download, extract, and execute "patch.bat" with administrator privileges. If your enteliWEB is at a version lower than 4.29, you must update enteliWEB before applying the patch.
+>
+> Regarding V4 devices with an integrated web server, the vendor is working on a new firmware version to fix the security flaw. In the meantime, we recommend not exposing the control subnet to the Internet.
+>
+> If you have any further questions, please do not hesitate to contact us.
+>
+> Thank you
+
+</details>
+
+## Server Info
+
+| Item | Value |
+| --- | --- |
+| VMware docs | ITShare (Andy Tsai – Inteplast IT's files) > `Projects\2025 Coroplast Server Room Relocation\Vmware info` |
+| Host | VMware ESXi at `172.16.86.114` |
+| MAC | `b4:7a:f1:ca:04:9c` (Notebook) |
+| Remote login | Remote Desktop as `administrator` (password is in the screenshot in the VMware info folder) |
+
+## Before You Start
+
+Complete these steps first:
+
+1. **Take a snapshot.** Sign in to ESXi at `172.16.86.114` and snapshot the enteliWEB VM before changing anything.
+2. **Connect to the server.** Open Remote Desktop and sign in as `administrator`.
+3. **Check the enteliWEB version.** It must be 4.29 – 4.33. If it is lower, update enteliWEB first.
+
+## Steps
+
+1. **Run the patch.** Download and extract **Patch PHP 4.29+**, then right-click `patch.bat` and choose **Run as administrator**.
+2. **Verify enteliWEB.** Open enteliWEB and confirm it loads and works normally.
+3. **Clean up.** Once everything works, delete the snapshot (snapshots slow the VM down if left in place).
+
+**Rollback:** If enteliWEB breaks after the patch, revert the VM to the snapshot you took before starting.
+
+## Next Step
+
+Update ticket 25352 with the result and reply to the vendor if anything failed.

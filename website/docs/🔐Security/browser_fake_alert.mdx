@@ -1,0 +1,30 @@
+---
+sidebar_label: Fake Virus Alerts
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# Browser: Remove Fake Virus Alerts
+
+A user reports a virus warning popup. These are almost always browser notifications from a scam site, not an actual infection.
+
+> **💡 Good to know:** Scam sites ask for permission to send browser notifications. If the user clicks **Allow**, often by accident or after a page nags until they do, the site can push alerts that look like Windows or antivirus warnings. They appear even when the browser is closed, which makes them convincing. Revoking the notification permission stops them.
+
+## Steps
+
+1. Open the browser and go to **Settings**.
+2. Open the notification settings:
+
+   | Browser | Path |
+   | --- | --- |
+   | Edge | **Cookies and site permissions** → **Notifications** |
+   | Chrome | **Privacy and security** → **Site settings** → **Notifications** |
+
+3. Find the offending site under **Allowed**.
+4. Move it to **Not allowed**, or remove it entirely.
+5. Review the rest of the **Allowed** list and remove anything the user doesn't recognize.
+6. Repeat in every browser the user has installed.
+
+**Expected result:** No further popups.
+
+> **⚠️ Tell the user:** These alerts are scam browser notifications, not malware. Never click buttons inside the popup itself.

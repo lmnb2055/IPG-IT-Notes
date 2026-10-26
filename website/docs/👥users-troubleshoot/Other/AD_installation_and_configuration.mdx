@@ -1,0 +1,38 @@
+---
+sidebar_label: Install AD LDS
+author: Sidney Chen
+created: 2026-10-06
+---
+
+# AD: Install and Configure Active Directory
+
+Use this guide to install an Active Directory Lightweight Directory Services (AD LDS) instance on Windows Server and enable the AD LDS client components on Windows 11 for administration and connectivity.
+
+> **💡 Good to know:** AD LDS provides LDAP directory services without a full Active Directory Domain Services domain. Use it for applications that need LDAP authentication or directory storage but should stay separate from the organization's main Active Directory. Each AD LDS instance is independent, with its own LDAP ports, application directory partitions, data files and administrators.
+
+## Before You Start
+
+Confirm you have:
+
+1. Administrative access to the Windows Server
+2. An available LDAP/LDAPS port
+3. The required AD LDS application partition name
+4. The service account that will run the AD LDS instance
+5. The account or group that should administer the instance
+6. Any required LDIF/schema files
+
+## Install AD LDS on Windows Server
+
+1. Open **Server Manager**.
+2. Select **Manage** → **Add Roles and Features**.
+3. Continue through the wizard until you reach **Server Roles**.
+4. Select **Active Directory Lightweight Directory Services**.
+5. Click **Add Features** when prompted.
+6. Continue through the wizard and select **Install**.
+7. When installation completes, launch the **AD LDS Setup Wizard** (Post-Deployment Configuration).
+
+## Domain
+
+| Setting | Value |
+| --- | --- |
+| Domain | `fuhq.home.usa` |

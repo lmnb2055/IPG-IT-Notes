@@ -1,0 +1,50 @@
+---
+sidebar_position: 3
+sidebar_label: Add TXQAC & FPCTX
+author: Sidney Chen
+created: 2026-10-26
+---
+
+# AS400: Add TXQAC & FPCTX Sessions
+
+How to add the TXQAC (test) and FPCTX (production) systems in ACS and save desktop shortcuts for them (ticket 24870).
+
+> **💡 Good to know:** TXQAC and FPCTX are separate IBM i systems, set up in ACS alongside the main AS400 session. TXQAC is **test**, FPCTX is **production**. Setup is identical for both; only the system name and description change.
+
+## Before You Start
+
+> **⚠️ Caution:** Label the shortcuts clearly. The two sessions look identical once open, and work done in FPCTX hits production.
+
+1. ACS must already be installed. See [ACS: Installation Guide](./ACS_installation_guide.mdx).
+
+## Steps
+
+Repeat these steps for each system:
+
+| | Test | Production |
+| --- | --- | --- |
+| **System name** | `TXQAC.fpcusa.com` | `FPCTX.fpcusa.com` |
+| **Description** | `TXQAC` | `FPCTX` |
+
+1. Search for **Access Client Solutions** and open it.
+2. Click **System Configuration** → **New**.
+3. Enter the **System name** and **Description** from the table above, then click **OK**.
+4. Select the system from the dropdown at the top.
+5. Go to **General** → **5250 Emulator**. Close the small popup window that appears.
+6. **Save As** the session to the Desktop, named for the system.
+
+**Expected result:** Two desktop shortcuts, each opening its own system and reaching the sign-on screen.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Shortcut opens Notepad or a file picker | Not associated with ACS. Set **Open with** to `acslaunch_win-64.exe`. |
+| Wrong system opens | The dropdown was still on the previous system when saved. Re-save. |
+| Session won't connect | Network or VPN. See [Network: Can't Reach Shared Drives or AS400](../Network/network_drive_access_troubleshooot.mdx). |
+| System name rejected | Hostname typo, or DNS can't resolve it. Test with `ping`. |
+
+## Related
+
+- [ACS: Installation Guide](./ACS_installation_guide.mdx): base install and the main AS400 session
+- [Laptop: Add AS400 Shortcuts](./add_shortcuts.mdx): copying existing session files to a desktop

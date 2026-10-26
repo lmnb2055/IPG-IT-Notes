@@ -1,0 +1,74 @@
+---
+sidebar_label: BOPP Test Site Access
+author: Sidney Chen
+created: 2026-10-26
+---
+
+# Meraki: Allow BOPP Access to the Staging Site
+
+Use this when BOPP users can't reach the staging/test website and traffic to the staging application gateway must be allowed through the Meraki site-to-site VPN firewall.
+
+> **💡 Good to know:** The staging site `core-staging.inteplast.com` resolves to `172.19.251.71`. The web app needs **TCP/443** allowed through the Meraki site-to-site VPN firewall. For the BOPP network, that's controlled by the **Allow BOPP Web** rule. A failed `ping` or `tracert` doesn't prove the router is blocking traffic, because ICMP may simply be filtered.
+
+## Step 1: Check the Firewall Rule in Meraki
+
+1. Sign in to the Meraki Dashboard.
+2. Select the BOPP network/appliance.
+3. Go to **Security & SD-WAN** → **Site-to-site VPN**.
+4. Scroll to **Site-to-site outbound firewall**.
+5. Find the **Allow BOPP Web** rule and confirm it's set to:
+
+   | Field | Value |
+   | --- | --- |
+   | Policy | Allow |
+   | Protocol | TCP |
+   | Source | BOPP |
+   | Destination | Staging application gateway (`172.19.251.71`) |
+   | Destination port | 443 |
+
+6. If the staging destination isn't included, add the Meraki network object **Staging agw** (`172.19.251.71`).
+7. Save the configuration.
+
+> **⚠️ Caution:** Meraki firewall rules are evaluated in order. Make sure **Allow BOPP Web** is above any broader **Deny BOPP** rule.
+
+## Step 2: Test from a BOPP Workstation
+
+1. Check DNS:
+
+   ```powershell
+   nslookup core-staging.inteplast.com
+   ```
+
+   It should return `172.19.251.71`.
+
+2. Test the actual web port (more useful than `ping`):
+
+   ```powershell
+   Test-NetConnection core-staging.inteplast.com -Port 443
+   ```
+
+   It should show `TcpTestSucceeded : True`.
+
+3. Open the test site in a browser and confirm the user can access it.
+
+**Expected result:** DNS resolves, the port test succeeds, and the site loads.
+
+## Troubleshooting
+
+### Ping or tracert fails
+
+Don't conclude right away that the router is blocking the site. In the original case, DNS resolved to `172.19.251.71`, and `tracert` reached `172.16.37.1` before timing out. A timeout after that point can mean routing or firewall filtering, but it can also just mean the devices along the way don't answer ICMP. Test the web port instead:
+
+```powershell
+Test-NetConnection 172.19.251.71 -Port 443
+```
+
+### Port test fails (`TcpTestSucceeded : False`)
+
+Check that:
+
+1. **Allow BOPP Web** is above any BOPP deny rule.
+2. **Staging agw** contains `172.19.251.71`.
+3. TCP port 443 is allowed.
+4. The source workstation belongs to the network object included in **BOPP**.
+5. The VPN route to `172.19.251.71` is available.

@@ -1,0 +1,48 @@
+---
+sidebar_position: 4
+sidebar_label: Add AS400 Shortcuts
+author: Sidney Chen
+created: 2026-10-06
+---
+
+# Laptop: Add AS400 Shortcuts
+
+How to put the AS400 session shortcuts on a user's desktop and set them to open with ACS.
+
+> **💡 Good to know:** AS400 sessions run through IBM i Access Client Solutions (ACS). The session files live in the Public profile, but users need them on their own desktop. The shortcuts also have to be pointed at the ACS launcher, because double-clicking a session file on its own won't open anything.
+
+## Before You Start
+
+1. ACS must already be installed. See [ACS: Installation Guide](./ACS_installation_guide.mdx).
+
+## Step 1: Copy the Session Files to the Desktop
+
+1. Go to:
+
+   ```text
+   C:\Users\Public\IBM\ClientSolutions
+   ```
+
+2. Copy these items to the user's Desktop:
+   - **Data Transfer**
+   - **FPCTX**
+   - **TXQAC**
+
+## Step 2: Set Them to Open with ACS
+
+1. Right-click a shortcut on the desktop → **Open with** → **Choose another app**.
+2. Browse to the ACS launcher:
+
+   ```text
+   C:\Users\Public\IBM\ClientSolutions\Start_Programs\Windows_x86-64\acslaunch_win-64.exe
+   ```
+
+3. Tick **Always use this app**, then click **OK**.
+4. Repeat for the remaining shortcuts.
+
+**Expected result:** Each shortcut opens its AS400 session (or Data Transfer) in ACS.
+
+## Related
+
+- [ACS: Installation Guide](./ACS_installation_guide.mdx): base install and the main AS400 session
+- [AS400: Add TXQAC & FPCTX Sessions](./add_TXQAC_and_FPCTX.mdx): creating the TXQAC and FPCTX sessions from scratch

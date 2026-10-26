@@ -1,0 +1,31 @@
+---
+sidebar_label: Remove Accounts
+author: Sidney Chen
+created: 2026-10-08
+---
+
+# Meraki: Remove Accounts
+
+How to remove an administrator's access to the Meraki dashboard.
+
+> **💡 Good to know:** Meraki admin accounts are managed per organization, separate from Entra ID. Disabling someone's Inteplast account does **not** remove their Meraki access, so it has to be done here as well. This is a standard offboarding step for anyone who had dashboard rights.
+
+> **⚠️ Caution:** Removal is immediate and cuts all dashboard access for that person. Confirm you have the right account by matching on **email, not name**, before deleting.
+
+## Steps
+
+1. Go to [account.meraki.com](https://account.meraki.com/login) and sign in.
+2. Navigate to **Organization** → **Administrators**.
+3. Search for the user's email address.
+4. Select the account and remove it.
+
+**Expected result:** The account no longer appears in the Administrators list, and the user can't sign in to the organization.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| User not in the Administrators list | They may be a network-level admin rather than org-level. Check the specific network. |
+| Remove option unavailable | You don't have full org admin rights. Escalate. |
+| Still has access after removal | Their session is still active, or they're an admin on another organization. Check each one. |
+| Two accounts on similar emails | A personal account alongside the corporate one. Remove both. |

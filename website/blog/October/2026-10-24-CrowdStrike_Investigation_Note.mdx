@@ -1,0 +1,153 @@
+---
+slug: crowdstrike-claxton-adware
+title: "CrowdStrike Investigation Note: CLAXTON Adware Detection"
+authors: [schen]
+tags: [security, crowdstrike]
+date: 2026-10-24
+---
+
+Falcon blocked Chrome on **CLAXTON** after it tried to load a local extension called `BrowserHelper` in the background. This note explains what the command does, why Falcon flagged it, and what still needs checking.
+
+> **💡 Preliminary assessment:** This looks like **adware / a potentially unwanted program (PUP)**, probably installed alongside PDFProSuite, rather than a serious malware compromise. To confirm, review the Process Tree and the `BrowserHelper` folder.
+
+{/* truncate */}
+
+## Incident Summary
+
+| Field | Value |
+| --- | --- |
+| Host | CLAXTON |
+| User | `clcla` |
+| Classification | Adware |
+| Severity | Low |
+| Result | Process blocked |
+| Verdict | True Positive |
+| Status | Closed |
+
+The command Falcon blocked:
+
+```text
+chrome.exe --no-startup-window --load-extension=C:\Users\clcla\AppData\Local\BrowserHelper
+```
+
+## Understanding the Detection
+
+### Office building analogy
+
+| In the office | On the PC |
+| --- | --- |
+| The office building | CLAXTON |
+| A trusted employee | Chrome |
+| The security guard | Falcon |
+| A package the employee carries in | The `BrowserHelper` extension |
+
+Chrome is trusted, but Falcon saw it being told to carry in an extra component. That package looked suspicious enough to trigger an adware detection.
+
+### What the command means
+
+| Part | What it does |
+| --- | --- |
+| `--no-startup-window` | Starts Chrome in the background. No browser window appears. |
+| `--load-extension` | Forces Chrome to load an extension straight from a local folder, skipping the Chrome Web Store. |
+| `BrowserHelper` | The local extension folder. Needs investigation to tell whether it is legitimate or unwanted. |
+
+## Why Software Uses Browser Extensions
+
+### Legitimate reasons
+
+Some desktop apps, like PDF software, install a Chrome extension to connect the browser to the app. For example, so you can:
+
+- Save webpages as PDF
+- Edit PDFs directly in Chrome
+- Open PDFs in the vendor's PDF app
+- Add toolbar shortcuts
+
+```text
+PDF software → browser extension → Chrome integration
+```
+
+### Suspicious reasons
+
+Adware likes browser extensions because extensions can:
+
+- Read browsing activity
+- Modify webpages and insert ads
+- Redirect searches
+- Change browser settings
+- Track user activity
+
+This is often easier than writing traditional malware.
+
+```text
+User installs free software → software installs BrowserHelper → BrowserHelper loads into Chrome → ads or redirects appear
+```
+
+## Why Falcon Flagged It
+
+`--no-startup-window` **combined with** `--load-extension` means Chrome is:
+
+1. Starting silently in the background
+2. Loading an extension directly from disk
+3. Possibly skipping normal user interaction
+
+This pattern is commonly linked to adware, PUPs and browser manipulation.
+
+## Possible Link to PDFProSuite
+
+`pdfprosuite.exe` appeared in the process list. If the Process Tree shows:
+
+```text
+pdfprosuite.exe
+└── chrome.exe --load-extension=BrowserHelper
+```
+
+then PDFProSuite most likely launched Chrome and told it to load `BrowserHelper`. That would point to a PUP/adware add-on installed by PDFProSuite, not a full malware compromise.
+
+## Falcon Labels Explained
+
+| Label | Meaning |
+| --- | --- |
+| Low severity | Low-priority risk. Needs review but is not critical. |
+| True Positive | Falcon judged the detection valid: the activity matched known unwanted behavior. |
+| Process blocked | Falcon stopped this execution. **This does not mean related files were removed.** |
+| Closed | The investigation is complete. Check the analyst notes for remediation details. |
+| Common prevalence | The file is seen on many systems. **This does not mean the activity is safe.** |
+
+## What We Still Don't Know
+
+The current information does not confirm whether:
+
+- `BrowserHelper` still exists
+- PDFProSuite was removed
+- The extension was quarantined
+- Any remediation was done
+
+## Recommended Investigation Steps
+
+1. **Check the Process Tree.** Confirm whether `pdfprosuite.exe` launched `chrome.exe`.
+2. **Inspect the `BrowserHelper` folder** at `C:\Users\clcla\AppData\Local\BrowserHelper`:
+   - Does it still exist?
+   - What files are inside?
+   - Is there a `manifest.json`?
+   - Who is the publisher?
+3. **Review the Falcon analyst notes** for closing comments, remediation actions, quarantine results and root cause.
+4. **Check Chrome extensions.** Open `chrome://extensions` and look for:
+   - Unknown or disabled extensions
+   - Extensions installed by other software
+   - Extensions asking for too many permissions
+
+## Preliminary Assessment
+
+More likely:
+
+```text
+PDFProSuite → BrowserHelper extension → Chrome background launch → Falcon adware detection
+```
+
+Less likely:
+
+```text
+Malware infection → command execution → system compromise
+```
+
+> **💡 Current likelihood:** PUP/adware behavior tied to browser extension loading, not a severe compromise. Confirm by reviewing the Process Tree and the contents of `BrowserHelper`.

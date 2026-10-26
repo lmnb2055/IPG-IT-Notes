@@ -1,0 +1,191 @@
+---
+slug: crowdstrike-missing-tags
+title: "Missing Falcon Tags: When Every Endpoint Looks the Same"
+authors: [schen]
+tags: [security, crowdstrike, endpoints]
+date: 2026-10-23
+---
+ 
+Our CrowdStrike console shows dozens of machines with a blank **Tags** column. The sensors are installed and working, so nothing looks broken — but Falcon can no longer tell which plant a machine belongs to. This article explains what grouping tags are, using a factory badge analogy, why blank tags quietly weaken our security posture, and exactly how to fix the machines you have access to.
+
+> **⚡ Quick Setup Guide:** Already know the background? Follow these steps, then see [Common errors](#common-errors) if anything looks wrong.
+>
+> 1. **Run the tag script as Administrator.** Right-click `Set-XXXX-Tag.bat` (where `XXXX` is your plant code, e.g. [Set-MGSE-Tag.bat](./Set-MGSE-Tag.bat)) and choose **Run as administrator**.
+> 2. **Confirm the tag on the machine.** Open Command Prompt as Administrator and run:
+>
+>    ```bat
+>    "C:\Program Files\CrowdStrike\CsSensorSettings.exe" show --grouping-tags
+>    ```
+>
+>    The output must show your plant tag (e.g. `MGSE`). If it is blank, the tag did not apply. Stop and re-run step 1.
+> 3. **Confirm the tag in the Falcon console.** Go to the CrowdStrike dashboard, open **Host management**, search for the device, and check that the **Tags** column shows the new tag. It can take a few minutes to sync.
+
+{/* truncate */}
+ 
+## What is a grouping tag?
+ 
+A **grouping tag** is a label the Falcon sensor reports about itself — `MGSE`, `BSHE`, `LSGL`. It answers one question: *which site does this machine belong to?*
+ 
+Falcon uses that answer to decide which **host group** a machine lands in, and host groups decide which **policies** apply to it. The tag is set **once, at install time**, by passing an extra parameter to the installer. Miss that parameter and the sensor installs perfectly — just anonymous.
+ 
+## An everyday example
+ 
+Imagine one of our plants.
+ 
+| At the plant | In IT |
+| --- | --- |
+| A worker's ID badge | The grouping tag |
+| The plant name on the badge | The tag value (`MGSE`, `BSHE`) |
+| The security desk | The Falcon console |
+| Badge colour decides which doors open | Host group decides which policy applies |
+| Headcount by plant | Reporting and incident scoping |
+ 
+### A worker with a badge
+ 
+They walk in. The security desk reads the badge, knows they're MGSE staff, and gives them exactly the access MGSE staff should have.
+ 
+```text
+Worker → badge reads "MGSE" → MGSE access rules applied
+```
+ 
+### A worker with no badge
+ 
+Here's the part that catches people out: **they still get in, and they still do their job.** Nothing visibly fails.
+ 
+But the security desk has no idea who they are. So they get the generic default treatment — not the rules written for their site. And when something goes wrong, nobody can answer "how many MGSE people were in the building?"
+ 
+```text
+Worker → no badge → default rules applied → invisible in site reporting
+```
+ 
+That is precisely what a blank **Tags** column means. The sensor is running. The machine is protected. It is simply **anonymous**, and anonymous machines get default handling.
+ 
+:::warning[Important nuance]
+ 
+A missing tag does **not** mean the endpoint is unprotected. Falcon is still running and still blocking threats. The damage is operational: wrong policy group, no way to scope an incident to one plant, and no accurate per-site reporting.
+ 
+:::
+ 
+## Why the tags went missing
+ 
+The cause is simple and entirely avoidable.
+ 
+The Windows installer can be run two ways:
+ 
+| How it was run | Result |
+| --- | --- |
+| Double-clicked the `.exe` | GUI installer opens. It has a field for the CID — and **no field for grouping tags**. Sensor installs untagged. |
+| Run from an elevated command line with `GROUPING_TAGS=` | Sensor installs with the correct site tag. |
+ 
+Nobody did anything wrong in an obvious way. The GUI simply has no place to type a tag, so a perfectly normal-looking installation produces an untagged machine every time.
+ 
+On Linux there is no install-time tag parameter at all — the tag is **always** set afterwards with `falconctl`, and that step is easy to forget.
+ 
+## Know which tag you are looking at
+ 
+Falcon has two kinds, and confusing them wastes a lot of time.
+ 
+| | Sensor grouping tag | Falcon grouping tag |
+| --- | --- | --- |
+| Set where | On the endpoint | In the console |
+| Survives a rebuild? | **Yes** | No |
+| Needs to touch the machine? | Yes | No |
+| Host group rule prefix | `SensorGroupingTags/MGSE` | `FalconGroupingTags/MGSE` |
+ 
+The console option is the quick fix. The sensor tag is the durable one. If your host group rules use the wrong prefix, they match nothing — a silent failure worth checking.
+ 
+## How to fix it
+ 
+### Machines already deployed
+ 
+This is most of the work. On a machine you have access to, open an **elevated** Command Prompt:
+ 
+> Start → type `cmd` → right-click **Command Prompt** → **Run as administrator**
+ 
+Check what's there, set the tag, then read it back:
+ 
+```bat
+"C:\Program Files\CrowdStrike\CsSensorSettings.exe" show --grouping-tags
+"C:\Program Files\CrowdStrike\CsSensorSettings.exe" set --grouping-tags "MGSE"
+"C:\Program Files\CrowdStrike\CsSensorSettings.exe" show --grouping-tags
+```
+ 
+A blank result on the first command is **normal** — that is the state you came to fix. The last command must print your tag. If it comes back empty, stop and do not mark the machine as done.
+ 
+For more than a handful of machines, use the `Set-MGSE-Tag.bat` script instead. It enforces the read-back step, refuses to report success unless the tag actually took, and writes a one-line result per machine so you have a record.
+
+📥 **Download:** [Set-MGSE-Tag.bat](./Set-MGSE-Tag.bat)
+
+:::caution
+ 
+`set` **overwrites** every existing tag. If a machine already carries tags you want to keep, list them all: `--grouping-tags "MGSE,Workstation"`.
+ 
+:::
+ 
+### Linux machines
+
+📥 **Download:** [Set-MGSE-Tag.sh](./Set-MGSE-Tag.sh)
+ 
+Linux needs a service restart — without it the tag is written but never syncs.
+ 
+```bash
+sudo /opt/CrowdStrike/falconctl -g --tags
+sudo /opt/CrowdStrike/falconctl -s -f --tags="MGSE"
+sudo systemctl restart falcon-sensor
+sudo /opt/CrowdStrike/falconctl -g --tags
+```
+ 
+The `-f` flag is required once any tag already exists; without it the command refuses to run.
+ 
+### New installs from now on
+ 
+Never double-click the installer again. Run it from an elevated Command Prompt:
+ 
+```bat
+FalconSensor_Windows.exe /install /quiet /norestart CID=YOUR_CID GROUPING_TAGS=MGSE ProvToken=YOUR_TOKEN
+```
+ 
+Request the current `CID` and `ProvToken` values from HQ IT. They are deployment credentials — do not circulate them in email or leave them in files on a shared drive.
+ 
+Better still, ask HQ for your plant's pre-built `.bat` file, which has your tag already filled in. One right-click, no typing, no chance of a truncated paste.
+ 
+### The fastest option for a backlog
+ 
+If you need the console to look correct today, Falcon grouping tags can be applied centrally with no endpoint access at all:
+ 
+> Host management → select the hosts → **Actions** → **Add Falcon grouping tags**
+ 
+This takes minutes and requires no visit to any machine. Remember it is cloud-side only — if a machine is wiped and rebuilt, the tag is gone. Treat it as the stopgap while the sensor tags get fixed properly.
+ 
+## Verify your work
+ 
+Two checks, both quick:
+ 
+1. **On the machine** — the `show` command prints your tag.
+2. **In the console** — Host management, filter by your tag, confirm your machines appear. Allow 5 to 15 minutes for check-in.
+The console is the source of truth. If a machine does not appear there after 15 minutes, the fix did not take.
+ 
+## Common errors
+ 
+| What you see | What it means |
+| --- | --- |
+| `Access is denied` | Command Prompt is not elevated. Re-open it with **Run as administrator**. |
+| `is not recognized` / path not found | Sensor not installed, or a non-default path. Check `dir "C:\Program Files\CrowdStrike"`. |
+| Maintenance protection error | Tamper protection is armed. Get the host's token from Host management → **Actions** → **Reveal maintenance token**. Tokens are per-host, so there is no single value for the fleet. |
+| `set` succeeds but `show` stays blank | Check the service: `sc query CSFalconService`. |
+ 
+:::danger[Never do this]
+ 
+Do **not** uninstall and reinstall the sensor to fix a tag. You lose the machine's detection history, and it is completely unnecessary — the tag can be changed in place in about thirty seconds.
+ 
+Do **not** edit the registry value directly. It is binary-encoded, and a bad write is worse than a blank tag.
+ 
+:::
+ 
+## Key takeaway
+ 
+:::tip[In Short]
+ 
+A grouping tag is the ID badge our endpoints wear. Without it a machine still works and is still protected — it is just anonymous, so it falls into default policy and vanishes from per-site reporting. The tags went missing because the GUI installer has no field for them. Fix deployed machines with `CsSensorSettings.exe` on Windows or `falconctl` on Linux, always read the tag back to confirm, and from now on install from an elevated command line with `GROUPING_TAGS=` so no machine ever starts life anonymous again.
+ 
+:::

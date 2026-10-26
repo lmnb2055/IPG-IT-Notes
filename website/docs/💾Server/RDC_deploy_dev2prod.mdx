@@ -1,0 +1,58 @@
+---
+sidebar_label: Deploy Dev to Prod
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# RDC: Deploy Files from Dev to Prod
+
+How to connect to `172.18.128.52` through Remote Desktop and copy files from `E:\WWW\dev` to `E:\WWW\prod` (reference ticket 24646).
+
+> **⚠️ Caution:** Copying files into prod may overwrite existing files and affect the production application. **Do not proceed** until the files to deploy, approval to update production, and a recovery method are all confirmed.
+
+## Before You Start
+
+Confirm you have:
+
+1. Network access to `172.18.128.52`.
+2. An authorized account with Remote Desktop access and the required folder permissions.
+3. Confirmation of which files or folders to copy.
+4. A backup or approved recovery method for any production files being replaced.
+
+> **ℹ️ Note:** The original notes use Tracy's account (`tyen@inteplast.com`). Confirm its use is authorized, and get the password from the approved credential source. Never write passwords in this guide.
+
+## Step 1: Connect to the Remote Computer
+
+1. Open **Remote Desktop Connection**.
+2. Enter `172.18.128.52` in **Computer**.
+3. Select **Connect**.
+4. Sign in with the authorized account.
+
+**Expected result:** The remote Windows desktop opens.
+
+## Step 2: Locate the Deployment Folders
+
+1. Open **File Explorer**.
+2. Browse to `E:\WWW`.
+3. Confirm the `dev` and `prod` folders are present.
+
+## Step 3: Copy the Approved Files
+
+1. Back up the production files that will be replaced, using the approved recovery method.
+2. Open `E:\WWW\dev`.
+3. Select the files or folders approved for deployment and copy them.
+4. Open `E:\WWW\prod` and paste.
+
+> **⚠️ Caution:** If Windows asks to replace existing files, confirm each replacement is part of the approved deployment before continuing.
+
+## Step 4: Verify the Deployment
+
+1. Confirm the intended files were copied successfully.
+2. Test the affected production application using the agreed validation steps.
+3. Record the deployment result.
+
+**Expected result:** The approved files are present in `prod`, and the application passes its validation checks. Deployment is complete only after the production application has been checked.
+
+## Next Step
+
+Notify the application owner of completion or any issues. If needed, [update the App ID for prod](./RDC_IIS_UpdateAppID.mdx).

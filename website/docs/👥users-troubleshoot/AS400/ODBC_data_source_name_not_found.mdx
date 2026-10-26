@@ -1,0 +1,48 @@
+---
+sidebar_position: 5
+sidebar_label: ODBC Not Found
+author: Sidney Chen
+created: 2026-10-06
+---
+
+# Excel: ODBC Data Source Name Not Found
+
+Excel workbooks that pull from AS400 fail with an ODBC error. The cause is a missing IBM i ODBC driver on the user's machine.
+
+> **💡 Good to know:** Some Excel workbooks query AS400 data live through an ODBC connection, which needs the IBM i Access ODBC driver installed locally. On new or reimaged laptops the driver is often missing, so the workbook fails even though the file itself is fine.
+
+## Symptoms
+
+The workbook opens and shows data, but **Refresh All** throws this error:
+
+```text
+[Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified
+```
+
+## Step 1: Check the Installed Drivers
+
+1. Open **ODBC Data Source Administrator** (search `odbcad32` from Start).
+2. Go to the **Drivers** tab and look for either:
+   - **IBM i Access ODBC Driver**
+   - **Client Access ODBC Driver (32-bit)**
+3. If either is there, go to the **User DSN** tab, click **Add…**, and create the data source using that driver.
+
+If the workbook refreshes now, you're done. If the driver isn't listed, go to Step 2.
+
+## Step 2: Install the Driver if Missing
+
+1. Go to the IT share:
+
+   ```text
+   ITShare\Programs\ACS\2026 ACS Installer\IBMiAccess_v1r1_WindowsAP_English
+   ```
+
+2. Run the installer.
+3. Reopen **ODBC Data Source Administrator** and confirm the driver now appears under **Drivers**.
+4. Create the User DSN as in [Step 1](#step-1-check-the-installed-drivers).
+
+**Expected result:** **Refresh All** in the workbook completes without an ODBC error and returns current data.
+
+## Related
+
+- [ACS: Installation Guide](./ACS_installation_guide.mdx): installs Java, ACS and the ODBC driver on a new laptop

@@ -1,0 +1,96 @@
+RDC: Deploy Files from Dev to Prod
+
+
+
+By Sidney Chen
+
+1 min
+
+See views
+
+Add a reaction
+This guide covers connecting to 172.18.128.52 through Remote Desktop and copying files from E:\WWW\dev to E:\WWW\prod.
+Reference Ticket #24646
+
+Overview
+Before You Begin
+Prerequisites
+Steps / Method
+Connect to the remote computer
+Locate the deployment folders
+Copy the approved files
+Verify the deployment
+Summary
+Next Steps
+Overview
+The supplied procedure uses a remote Windows computer to access development and production folders. Files are copied from the development folder into the production folder.
+
+Before You Begin
+Caution: Copying files into prod may overwrite existing files and affect the production application.
+
+Do not proceed if: The files to deploy, approval to update production, or recovery method have not been confirmed.
+
+Prerequisites
+Network access to 172.18.128.52.
+
+An authorized account with Remote Desktop access and the required folder permissions.
+
+Confirmation of which files or folders to copy.
+
+A backup or approved recovery method for any production files being replaced.
+
+Note: The original notes specify Tracy’s account. Confirm that its use is authorized, and retrieve credentials through the approved credential source. Keep passwords out of this guide.
+
+Steps / Method
+Connect to the remote computer
+Open Remote Desktop Connection.
+
+Enter 172.18.128.52 in Computer.
+
+tyen@inteplast.com
+
+
+Select Connect.
+
+Sign in with the authorized account.
+
+Expected result: The remote Windows desktop opens.
+
+Locate the deployment folders
+Open File Explorer.
+
+Browse to E:\WWW.
+
+Confirm that the dev and prod folders are present.
+
+Copy the approved files
+Back up the production files that will be replaced using the approved recovery method.
+
+Open E:\WWW\dev.
+
+Select the files or folders approved for deployment.
+
+Copy the selection.
+
+Open E:\WWW\prod.
+
+Paste the copied items.
+
+Caution: If Windows asks to replace existing files, confirm that each replacement is part of the approved deployment before continuing.
+
+Verify the deployment
+Confirm that the intended files were copied successfully.
+
+Test the affected production application using the agreed validation steps.
+
+Record the deployment result.
+
+Expected result: The approved files are present in prod, and the affected application passes its validation checks.
+
+Summary
+This procedure copies approved files from E:\WWW\dev to E:\WWW\prod on 172.18.128.52. Deployment is complete only after the production application has been checked.
+
+Next Steps
+Notify the application owner of completion or any issues.
+
+You can see this article to update App ID for prod if needed.

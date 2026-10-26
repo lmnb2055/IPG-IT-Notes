@@ -1,0 +1,55 @@
+---
+sidebar_label: Network Drive Access
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# Network: Can't Reach Shared Drives or AS400
+
+First steps when a user can't reach network folders, AS400, or other internal resources.
+
+> **💡 Good to know:** Check the user's IP address first. It tells you which situation you're in before you troubleshoot anything else.
+
+## Common Causes
+
+Most "I can't get to the shared drive" tickets come down to one of these:
+
+1. The user isn't actually on the corporate network.
+2. The VPN **isn't** connected when it should be.
+3. The VPN **is** connected when it shouldn't be.
+4. The user needs to change their password.
+
+## Step 1: Find Out Where the User Is
+
+Run `ipconfig` on the user's machine and check the IPv4 address:
+
+| Address range | Meaning | Go to |
+| --- | --- | --- |
+| `172.18.x.x` | On the corporate network (onsite) | [Onsite users](#step-2a-onsite-users) |
+| `192.168.x.x` | Home network (remote); needs Ivanti VPN | [Remote users](#step-2b-remote-users-wfh) |
+
+## Step 2a: Onsite Users
+
+1. Check the **Ethernet** cable, or the **Wi-Fi** connection if the user is wireless.
+2. Run `ipconfig` again and confirm it shows a `172.18.x.x` address.
+3. Make sure **Ivanti VPN is disconnected**.
+
+> **⚠️ Caution:** Onsite users should not connect to the VPN. Running it on the corporate network causes routing problems and is a common cause of access failures in itself. Disconnect it before troubleshooting further.
+
+## Step 2b: Remote Users (WFH)
+
+1. Confirm **Ivanti VPN** is connected.
+2. Test connectivity from a terminal:
+
+   ```bat
+   ping as400.inteplast.com
+   ```
+
+3. If the ping gets replies, the network path is fine. The problem is likely permissions or the user's account (for example, a password that needs to be changed), not connectivity.
+
+## Expected Result
+
+| User | Working state |
+| --- | --- |
+| Onsite | `172.18.x.x` address, VPN off, resources reachable |
+| Remote | Ivanti connected, ping replies, resources reachable |

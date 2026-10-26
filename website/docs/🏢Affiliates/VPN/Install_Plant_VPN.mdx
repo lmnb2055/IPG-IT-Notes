@@ -1,0 +1,63 @@
+---
+sidebar_label: Install Plant VPN
+author: Sidney Chen
+created: 2026-10-26
+---
+
+# VPN: Install a Plant VPN Connection
+
+How to set up a plant VPN connection on a user's laptop.
+
+> **💡 Good to know:** Plant VPNs are created from a script, not configured by hand. Each plant has its own connection, and the user's credentials come from Meraki. Once the connection exists, two settings need adjusting before it works reliably: **encryption enforcement** and **IPv6**.
+
+## Before You Start
+
+> **ℹ️ Note:** Confirm the user is authorized for that specific plant before setting anything up. Credentials come from Meraki. See [Meraki VPN: Check and Set Up a User's VPN Access](./Meraki_VPN_user_credential.mdx).
+
+## Step 1: Create the Connection
+
+1. Get the plant's VPN script.
+2. Run it on the user's machine to create the connection.
+
+{/* Screenshot: image-20261005-194003.png */}
+
+## Step 2: Create the Shortcut
+
+1. Open **Rasphone**.
+2. Locate the plant's VPN connection.
+3. Create a desktop shortcut and name it **VPN**.
+
+> **ℹ️ Note:** Rename the desktop shortcut only. Leave the connection name in Rasphone as the script created it.
+
+## Step 3: Adjust the Connection Properties
+
+1. Open the VPN connection's network properties.
+2. Go to **Security** → **Data Encryption** and select **Require encryption (disconnect if server declines)**.
+3. Untick **Internet Protocol Version 6 (TCP/IPv6)**.
+4. Save.
+
+{/* Screenshots: image-20261008-190805.png, image-20261008-190818.png */}
+
+## Step 4: Sign In and Test
+
+1. Enter the user's VPN credentials from Meraki.
+2. Tick **Save my username and password**.
+3. Set the domain to `IPG`.
+4. Connect, and test access to an internal resource.
+
+**Expected result:** The VPN connects and the user can reach the plant resource they need.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| Connects but no internal access | IPv6 is still enabled, or the domain is wrong. Confirm it's `IPG`. |
+| Disconnects immediately | Encryption setting mismatch. Confirm **Require encryption**. |
+| Credentials rejected | Wrong plant, or the account isn't authorized. Verify in Meraki. |
+| Connection missing after reboot | The script created it for the wrong profile. Rerun it as the user. |
+| User is already on the corporate network | VPN shouldn't be used onsite. See [Network: Can't Reach Shared Drives or AS400](../../👥users-troubleshoot/Network/network_drive_access_troubleshooot.mdx). |
+
+## Related
+
+- [Meraki VPN: Check and Set Up a User's VPN Access](./Meraki_VPN_user_credential.mdx)
+- *Plants VPN Overview*
