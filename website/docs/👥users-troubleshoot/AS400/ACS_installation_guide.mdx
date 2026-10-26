@@ -25,13 +25,15 @@ From the IT share, download the 2026 ACS installer package:
 | ODBC | `IBMiAccess_v1r1_WindowsAP_English` |
 | IBM i Access | `IBMiAccess_v1r1_1.1.9.11` |
 
-{/* Screenshots: image-20261005-195016.png, 280e9a47-8e57-43e5-9798-0a9025ad79f6.png */}
+![2026 ACS installer package on the IT share](./pic/image-20261005-195016.png)
+
+![ACS installer files](./pic/280e9a47-8e57-43e5-9798-0a9025ad79f6.png)
 
 ## Step 2: Install Java
 
 Install Java first, because ACS won't run without it. Accept the admin prompt if it appears.
 
-{/* Screenshot: image-20261005-195249.png */}
+![Installing Java](./pic/image-20261005-195249.png)
 
 ## Step 3: Install ACS
 
@@ -40,7 +42,7 @@ Install Java first, because ACS won't run without it. Accept the admin prompt if
 
 > **ℹ️ Note:** If the terminal display looks wrong, set **Settings** → **System** → **Advanced** → **Terminal** → **Windows Console Host**. This is cosmetic only.
 
-{/* Screenshot: image-20261005-195409.png */}
+![Install ACS 64-bit, all users](./pic/image-20261005-195409.png)
 
 ## Step 4: Create the Display Session
 
@@ -61,7 +63,7 @@ Open **ACS Session Manager** → **New Display Session**.
 | Auto-Connect | Yes |
 | Auto-Reconnect | Yes |
 
-{/* Screenshot: image-20261005-200430.png */}
+![Display session connection settings](./pic/image-20261005-200430.png)
 
 ### Workstation ID
 
@@ -73,7 +75,7 @@ Click **Generate…** and set:
 4. Leave **Truncate Characters** on **Beginning**, starting index `0`.
 5. The preview should read `&COMPN*=`. Click **OK**.
 
-{/* Screenshot: image-20261005-195703.png */}
+![Workstation ID generate settings](./pic/image-20261005-195703.png)
 
 ### Connection → Advanced
 
@@ -81,7 +83,7 @@ Click **Generate…** and set:
 2. Leave both timeouts at `0`, and **Password Prompting** on **Use IBM i Access Client Solutions setting**.
 3. Click **OK**.
 
-{/* Screenshot: image-20261005-195737.png */}
+![Connection advanced settings](./pic/image-20261005-195737.png)
 
 ## Step 5: Save the Shortcut
 
@@ -93,7 +95,7 @@ Click **Generate…** and set:
    C:\Users\Public\IBM\ClientSolutions\Start_Programs\Windows_x86-64\acslaunch_win-64.exe
    ```
 
-{/* Screenshot: image-20261005-195800.png */}
+![Save the session to the desktop as AS400](./pic/image-20261005-195800.png)
 
 **Expected result:** Double-clicking the **AS400** shortcut opens the session and reaches the sign-on screen.
 

@@ -1,0 +1,25 @@
+---
+sidebar_label: Whitelist Not Working
+author: Sidney Chen
+created: 2026-10-26
+---
+
+# Travel Whitelist: User Still Blocked
+
+What to check when a user was added to the travel whitelist but still can't sign in while traveling.
+
+> **💡 Good to know:** Once a user is on the travel whitelist, they should be good to go. If they're still blocked, the cause is usually the **ZTD_out of country** Conditional Access policy, not the whitelist entry itself.
+
+## Before You Start
+
+1. Confirm the user was added correctly. See [Travel Request: Add Users to Travel Whitelist](../../tutorial-onboard/Intern/Travel_Request_Add_Users_To_Travel_Whitelist.mdx).
+2. Check that the entry's date range covers today and its status is **active**.
+
+## Steps
+
+1. Open the [Microsoft Entra admin center](https://entra.microsoft.com).
+2. Go to **Users**, open the user, and check **Sign-in logs** for the failed sign-in. The **Conditional Access** tab shows which policy blocked it.
+3. Go to **Protection** → **Conditional Access** → **Policies** and open **ZTD_out of country**.
+4. Check whether the user (or the travel group) is excluded from the policy, and that the user's travel country is covered.
+
+**Expected result:** The user's next sign-in from abroad succeeds, and the sign-in log no longer shows **ZTD_out of country** as blocking it.
