@@ -1,6 +1,7 @@
 {
   "label": "Tutorial - Extras",
   "position": 3,
+  "className": "sidebar-hidden",
   "link": {
     "type": "generated-index"
   }

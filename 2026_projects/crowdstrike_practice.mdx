@@ -1,0 +1,163 @@
+# Project 1: Endpoint Health Check (MGSE)
+
+> **💡 Goal:** Review a small set of computers (operating system, sensor version, last seen, assigned policies) and write a short report of findings and items to investigate. This project is **read-only**: no policy changes, host containment or response commands until there is an approved lab.
+
+**Learn:** Host inventory, filters, sensor coverage and policies.
+
+**Process:**
+
+1. Find each host record and record the operating system, sensor version and last-seen time.
+2. Check its host groups and assigned policies, where visible.
+3. Look for differences between the computers.
+4. Write findings and questions, e.g. "This laptop hasn't checked in recently; is it retired or simply offline?"
+
+> **💡 Reminder:** An old last-seen time is a lead to investigate. It doesn't by itself prove that a computer is unprotected.
+
+---
+
+## Hosts reviewed
+
+10 MGSE workstations, exported from Falcon on **2026-10-22**. All share external IP `24.227.251.90`.
+
+| Hostname | OS | Sensor version | Last seen | First seen | Last user | Local IP |
+| --- | --- | --- | --- | --- | --- | --- |
+| DESKTOP-Q33DL22 | Windows 11 | 7.22.19406.0 | 2026-10-22 | 2026-03-03 | Renee Adams | 172.16.69.42 |
+| DALERANFT | Windows 11 | 7.22.19406.0 | ⚠️ 2026-09-14 | 2025-09-30 | User | 172.16.69.41 |
+| DESKTOP-U6PL8MF | Windows 11 | 7.34.20610.0 | ⚠️ 2026-09-23 | 2026-09-23 | Khai Cin | 172.16.69.41 |
+| DESKTOP-18PM8NI | Windows 11 | 7.34.20610.0 | 2026-10-22 | 2026-06-17 | admin | 172.16.69.4 |
+| DESKTOP-139S01O | Windows 11 | 7.34.20610.0 | 2026-10-22 | 2026-03-20 | Jasmine Sanchez | 172.16.69.33 |
+| DESKTOP-IOH2O8U | Windows 11 | 7.34.20610.0 | 2026-10-22 | 2026-06-11 | Victor Vargas | 172.16.69.30 |
+| RENEEADAMS | ⚠️ Windows 10 | 7.22.19406.0 | ⚠️ 2026-10-08 | 2026-05-22 | QA Lab | 172.16.69.251 |
+| BRYCE-LAPTOP | Windows 11 | 7.22.19406.0 | 2026-10-22 | 2025-09-30 | Bryce | 172.16.69.245 |
+| DESKTOP-J0MTO4M | Windows 11 | 7.34.20610.0 | ⚠️ 2026-09-18 | 2026-06-19 | Jessie Tagle | 172.16.69.239 |
+| DESKTOP-13O6K9B | Windows 11 | 7.22.19406.0 | 2026-10-22 | 2026-02-05 | Jose | 172.16.69.238 |
+
+**Same on every host:**
+
+| Field | Value |
+| --- | --- |
+| Host groups | `No Token Protection`, `Workstations` |
+| Grouping tags | *(blank)* |
+| Policies | `ActiveWin`, `Default Policy (Windows)`, `Windows Sensor Maintenance`, `platform_default`, `Default Policy (Windows, Linux, Mac)` |
+
+---
+
+## Findings
+
+1. **Four hosts have not checked in recently** (as of 2026-10-22):
+
+   | Hostname | Last seen | Days ago |
+   | --- | --- | --- |
+   | DALERANFT | 2026-09-14 | 38 |
+   | DESKTOP-J0MTO4M | 2026-09-18 | 34 |
+   | DESKTOP-U6PL8MF | 2026-09-23 | 29 |
+   | RENEEADAMS | 2026-10-08 | 14 |
+
+   DESKTOP-U6PL8MF was first and last seen on the same day, only about 2 hours apart.
+
+2. **DALERANFT and DESKTOP-J0MTO4M share the same MAC address** (`c4-d6-d3-b1-64-33`). They are also two of the stale hosts. This may be one physical PC that was reimaged or renamed, leaving an old record behind, or the MAC could belong to a shared USB/dock network adapter.
+
+3. **Sensor versions are mixed.** Five hosts run `7.22.19406.0` and five run `7.34.20610.0`, even though they all have the same `Windows Sensor Maintenance` policy. Some online hosts (DESKTOP-Q33DL22, BRYCE-LAPTOP, DESKTOP-13O6K9B) are still on 7.22.
+
+4. **RENEEADAMS still runs Windows 10**, and its last user is `QA Lab`. Renee Adams now logs in to DESKTOP-Q33DL22, so RENEEADAMS may be an old PC that was reused for QA.
+
+5. **No host has a grouping tag**, even though all 10 belong to MGSE. See [Missing Falcon Tags](../website/docs/🔐Security/crowdstrike-missing-tags.mdx).
+
+6. **All hosts have the same policies.** The prevention policy is `ActiveWin` (a custom policy, assigned around 2026-09-09). The other policies are defaults.
+
+7. **DESKTOP-18PM8NI's last user is `admin`**, a generic account rather than a named person.
+
+---
+
+## Questions
+
+1. **What is `Default Policy (Windows, Linux, Mac)`?**
+   It is the [host retention policy](https://falcon.us-2.crowdstrike.com/policies/host-retention/all/detail/d12324ca0dd7461a880feff419e2ab54/Settings). It controls how long inactive hosts stay visible in the console. A host gets a *default* policy when it is not in a host group assigned to a custom policy.
+
+2. **Why are some last-seen dates so old?**
+   - DALERANFT: offline
+   - DESKTOP-J0MTO4M: offline
+   - DESKTOP-U6PL8MF: ?
+   - RENEEADAMS: ?
+
+   Next step: ask the users (or check AD) whether each PC is retired, replaced or just powered off.
+
+3. **Are DALERANFT and DESKTOP-J0MTO4M the same machine?** If so, can the old record be hidden?
+
+4. **Why are some online hosts still on sensor 7.22?** What does `Windows Sensor Maintenance` actually set?
+
+5. **What does the `No Token Protection` host group mean?** Does it turn off the uninstall/maintenance token for these PCs?
+
+---
+
+<details>
+<summary>Raw Falcon export (2026-10-22)</summary>
+
+```text
+DESKTOP-Q33DL22	20f4763bb58049e6bfe4ebf804a053d5	2026-10-22T18:05:04Z	2026-03-03T14:55:29Z	Windows	Windows 11	Workstation	172.16.69.42	24.227.251.90	4c-c5-d9-2c-42-b9	7.22.19406.0	No Token Protection,Workstations		Renee Adams	unassigned	"ActiveWin
+09 Sep 26 15:57 UTC"	"Default Policy (Windows)
+03 Mar 26 15:01 UTC"	"Windows Sensor Maintenance
+03 Mar 26 15:01 UTC"	"platform_default
+03 Mar 26 15:00 UTC"	"Default Policy (Windows, Linux, Mac)
+03 Mar 26 15:01 UTC"
+DALERANFT	c500a4a07d6646d4b9d954c4ecb6c484	2026-09-14T17:39:33Z	2025-09-30T15:35:20Z	Windows	Windows 11	Workstation	172.16.69.41	24.227.251.90	c4-d6-d3-b1-64-33	7.22.19406.0	No Token Protection,Workstations		User	unassigned	"ActiveWin
+09 Sep 26 16:24 UTC"	"Default Policy (Windows)
+18 Feb 26 14:03 UTC"	"Windows Sensor Maintenance
+30 Sep 25 15:36 UTC"	"platform_default
+30 Sep 25 15:35 UTC"	"Default Policy (Windows, Linux, Mac)
+30 Sep 25 15:36 UTC"
+DESKTOP-U6PL8MF	52cac072d5c746499a81ecd5bc2d40ab	2026-09-23T20:35:22Z	2026-09-23T18:30:31Z	Windows	Windows 11	Workstation	172.16.69.41	24.227.251.90	b8-85-84-c0-c6-65	7.34.20610.0	No Token Protection,Workstations		Khai Cin	unassigned	"ActiveWin
+23 Sep 26 18:42 UTC"	"Default Policy (Windows)
+23 Sep 26 18:34 UTC"	"Windows Sensor Maintenance
+23 Sep 26 18:34 UTC"	"platform_default
+23 Sep 26 18:33 UTC"	"Default Policy (Windows, Linux, Mac)
+23 Sep 26 18:33 UTC"
+DESKTOP-18PM8NI	92e479c7305b4d32b19d7ba4ef18e132	2026-10-22T18:15:53Z	2026-06-17T15:00:55Z	Windows	Windows 11	Workstation	172.16.69.4	24.227.251.90	a0-1e-0b-15-a7-ad	7.34.20610.0	No Token Protection,Workstations		admin	unassigned	"ActiveWin
+09 Sep 26 15:50 UTC"	"Default Policy (Windows)
+17 Jun 26 15:03 UTC"	"Windows Sensor Maintenance
+17 Jun 26 15:03 UTC"	"platform_default
+17 Jun 26 15:02 UTC"	"Default Policy (Windows, Linux, Mac)
+17 Jun 26 15:02 UTC"
+DESKTOP-139S01O	8b28285c273c4aa4838caa34e596373b	2026-10-22T18:25:54Z	2026-03-20T16:04:41Z	Windows	Windows 11	Workstation	172.16.69.33	24.227.251.90	bc-d2-2c-4a-a5-2e	7.34.20610.0	No Token Protection,Workstations		Jasmine Sanchez	unassigned	"ActiveWin
+09 Sep 26 15:48 UTC"	"Default Policy (Windows)
+20 Mar 26 16:10 UTC"	"Windows Sensor Maintenance
+20 Mar 26 16:10 UTC"	"platform_default
+20 Mar 26 16:10 UTC"	"Default Policy (Windows, Linux, Mac)
+20 Mar 26 16:10 UTC"
+DESKTOP-IOH2O8U	ea9e3417759b4ee8912f3fe8ffccaf5d	2026-10-22T17:26:45Z	2026-06-11T14:30:49Z	Windows	Windows 11	Workstation	172.16.69.30	24.227.251.90	bc-d2-2c-4d-03-69	7.34.20610.0	No Token Protection,Workstations		Victor Vargas	unassigned	"ActiveWin
+10 Sep 26 12:34 UTC"	"Default Policy (Windows)
+11 Jun 26 14:37 UTC"	"Windows Sensor Maintenance
+11 Jun 26 14:37 UTC"	"platform_default
+11 Jun 26 14:34 UTC"	"Default Policy (Windows, Linux, Mac)
+11 Jun 26 14:34 UTC"
+RENEEADAMS	b46a7adceb9548a4b2b47171bc56ad3b	2026-10-08T18:30:30Z	2026-05-22T16:23:52Z	Windows	Windows 10	Workstation	172.16.69.251	24.227.251.90	28-16-ad-53-0a-ed	7.22.19406.0	No Token Protection,Workstations		QA Lab	unassigned	"ActiveWin
+16 Sep 26 16:09 UTC"	"Default Policy (Windows)
+22 May 26 16:30 UTC"	"Windows Sensor Maintenance
+22 May 26 16:30 UTC"	"platform_default
+22 May 26 16:26 UTC"	"Default Policy (Windows, Linux, Mac)
+22 May 26 16:26 UTC"
+BRYCE-LAPTOP	43d56931a6e2453ba3f1c4c4b03e503c	2026-10-22T11:25:31Z	2025-09-30T14:05:44Z	Windows	Windows 11	Workstation	172.16.69.245	24.227.251.90	08-b4-d2-b8-2d-15	7.22.19406.0	No Token Protection,Workstations		Bryce	unassigned	"ActiveWin
+09 Sep 26 16:01 UTC"	"Default Policy (Windows)
+18 Feb 26 14:07 UTC"	"Windows Sensor Maintenance
+06 Oct 25 05:57 UTC"	"platform_default
+06 Oct 25 05:55 UTC"	"Default Policy (Windows, Linux, Mac)
+06 Oct 25 05:57 UTC"
+DESKTOP-J0MTO4M	31e76aaa88454a85b34f78509494c208	2026-09-18T21:01:27Z	2026-06-19T13:50:48Z	Windows	Windows 11	Workstation	172.16.69.239	24.227.251.90	c4-d6-d3-b1-64-33	7.34.20610.0	No Token Protection,Workstations		Jessie Tagle	unassigned	"ActiveWin
+09 Sep 26 15:48 UTC"	"Default Policy (Windows)
+19 Jun 26 13:52 UTC"	"Windows Sensor Maintenance
+19 Jun 26 13:52 UTC"	"platform_default
+19 Jun 26 13:51 UTC"	"Default Policy (Windows, Linux, Mac)
+19 Jun 26 13:51 UTC"
+DESKTOP-13O6K9B	0dc747d259144783bab74bdd60c842cc	2026-10-22T18:00:54Z	2026-02-05T19:35:07Z	Windows	Windows 11	Workstation	172.16.69.238	24.227.251.90	28-92-00-d8-7e-62	7.22.19406.0	No Token Protection,Workstations		Jose	unassigned	"ActiveWin
+10 Sep 26 12:43 UTC"	"Default Policy (Windows)
+18 Feb 26 14:16 UTC"	"Windows Sensor Maintenance
+05 Feb 26 19:41 UTC"	"platform_default
+05 Feb 26 19:40 UTC"	"Default Policy (Windows, Linux, Mac)
+05 Feb 26 19:41 UTC"
+```
+
+</details>
+
+
+# Project 2: Investigate one existing detection
+Follow a historical detection from the alert to the affected host and process tree.	Detection details, parent/child processes, command lines, and investigation context.	A one-page explanation of what happened and what evidence supports it.

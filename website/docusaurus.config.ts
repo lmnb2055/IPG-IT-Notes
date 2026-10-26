@@ -127,7 +127,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Job Notes',
+      title: 'IPG-IT Team',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',

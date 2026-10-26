@@ -52,3 +52,8 @@
 .theme-last-updated {
   display: none;
 }
+
+/* Hidden from the sidebar but still published (Docusaurus tutorial pages) */
+.sidebar-hidden {
+  display: none;
+}

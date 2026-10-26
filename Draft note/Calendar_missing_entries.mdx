@@ -1,0 +1,35 @@
+---
+sidebar_label: Calendar Missing Entries
+author: Sidney Chen
+created: 2026-10-23
+---
+
+# Outlook: Shared Calendar Missing Entries
+
+A user can see a shared calendar, but some entries are missing. This is usually a group membership problem, not a calendar problem.
+
+> **💡 Good to know:** Shared team calendars, such as the BDM calendar, are tied to a Microsoft 365 group. What a user sees depends on their membership in that group. If entries posted by specific colleagues are missing, check whether those colleagues are members: a non-member's entries won't show up on the group calendar.
+
+## Which Method to Use
+
+| Method | Use when |
+| --- | --- |
+| [1. Entra/Intune admin center](#method-1-entraintune-admin-center) | Default; works for most groups |
+| [2. SharePoint admin center](#method-2-sharepoint-admin-center) | The group is managed in SharePoint |
+
+## Method 1: Entra/Intune admin center
+
+1. Go to **Groups** → **All groups**.
+2. Search for the group (e.g. *Business Development*).
+3. Open the group and select **Members**.
+4. Confirm the expected people are listed. Add members as needed.
+
+## Method 2: SharePoint admin center
+
+Follow the same steps in the SharePoint admin center for groups managed there.
+
+> **⚠️ Caution:** This requires SharePoint admin rights. Request access before trying this route.
+
+## After the Fix
+
+**Expected result:** Once membership is corrected and the client syncs, the missing entries appear on the shared calendar. Allow time for sync before retesting.
