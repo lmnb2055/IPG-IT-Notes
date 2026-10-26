@@ -1,96 +1,53 @@
-RDC: Deploy Files from Dev to Prod
+---
+sidebar_position: 1
+sidebar_label: Server Room Intro
+author: Sidney Chen
+created: 2026-10-26
+---
 
+# Server Room: HQ Equipment Overview
 
+An orientation to the equipment in the HQ server room: what each device is and what it does.
 
-By Sidney Chen
+> **💡 Good to know:** Inteplast Group IT maintains the firewall, virtualization, storage and network switching equipment in the server room on the **Formosa 3rd floor**. Use this page to identify hardware by sight and by label before touching anything. Devices are marked with **yellow hostname labels**.
 
-1 min
+## Edge & Firewall
 
-See views
+| Label | Device | Role |
+| --- | --- | --- |
+| IPHQ | Cisco Meraki MX (x2) | Edge routing and SD-WAN, WAN/LAN with SFP+ uplinks. Paired for high availability (HA). |
 
-Add a reaction
-This guide covers connecting to 172.18.128.52 through Remote Desktop and copying files from E:\WWW\dev to E:\WWW\prod.
-Reference Ticket #24646
+{/* Photo: 2f798fde-b888-4014-a4e5-1c2b010af1cf.jpg (Cisco Meraki MX x2) */}
 
-Overview
-Before You Begin
-Prerequisites
-Steps / Method
-Connect to the remote computer
-Locate the deployment folders
-Copy the approved files
-Verify the deployment
-Summary
-Next Steps
-Overview
-The supplied procedure uses a remote Windows computer to access development and production folders. Files are copied from the development folder into the production folder.
+## Network Switching
 
-Before You Begin
-Caution: Copying files into prod may overwrite existing files and affect the production application.
+| Label | Device | Role |
+| --- | --- | --- |
+| IPHQCORE | Cisco Catalyst | Core switch: patch panel uplinks, fiber to distribution |
 
-Do not proceed if: The files to deploy, approval to update production, or recovery method have not been confirmed.
+{/* Photo: 85f831_20260919110333055559-20260919-153114.jpg */}
 
-Prerequisites
-Network access to 172.18.128.52.
+## Servers & Virtualization
 
-An authorized account with Remote Desktop access and the required folder permissions.
+| Label | Role |
+| --- | --- |
+| IPHQVMS1 | Virtualization host |
+| IPHQVMS2 | Virtualization host |
 
-Confirmation of which files or folders to copy.
+{/* Photos: image-20260919-154108.png, image-20260919-154057.png */}
 
-A backup or approved recovery method for any production files being replaced.
+## Web Filtering
 
-Note: The original notes specify Tracy’s account. Confirm that its use is authorized, and retrieve credentials through the approved credential source. Keep passwords out of this guide.
+| Label | Device | Role |
+| --- | --- | --- |
+| IPG | Barracuda Web Filter 610 | Web filtering for the Inteplast Group segment |
 
-Steps / Method
-Connect to the remote computer
-Open Remote Desktop Connection.
+{/* Photo: bc9520_20260919110333012290-20260919-153558.jpg */}
 
-Enter 172.18.128.52 in Computer.
+## Not Yet Documented
 
-tyen@inteplast.com
+The rack also holds these, which still need a row above:
 
-
-Select Connect.
-
-Sign in with the authorized account.
-
-Expected result: The remote Windows desktop opens.
-
-Locate the deployment folders
-Open File Explorer.
-
-Browse to E:\WWW.
-
-Confirm that the dev and prod folders are present.
-
-Copy the approved files
-Back up the production files that will be replaced using the approved recovery method.
-
-Open E:\WWW\dev.
-
-Select the files or folders approved for deployment.
-
-Copy the selection.
-
-Open E:\WWW\prod.
-
-Paste the copied items.
-
-Caution: If Windows asks to replace existing files, confirm that each replacement is part of the approved deployment before continuing.
-
-Verify the deployment
-Confirm that the intended files were copied successfully.
-
-Test the affected production application using the agreed validation steps.
-
-Record the deployment result.
-
-Expected result: The approved files are present in prod, and the affected application passes its validation checks.
-
-Summary
-This procedure copies approved files from E:\WWW\dev to E:\WWW\prod on 172.18.128.52. Deployment is complete only after the production application has been checked.
-
-Next Steps
-Notify the application owner of completion or any issues.
-
-You can see this article to update App ID for prod if needed.
+- FortiGate (edge)
+- IBM file and VM servers
+- RLE environmental monitoring

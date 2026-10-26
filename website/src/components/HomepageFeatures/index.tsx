@@ -11,32 +11,32 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Fix User Issues Fast',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Step-by-step fixes for everyday tickets: password resets, AS400 and
+        ACS, VPN and network drives, Outlook, OneDrive and SharePoint.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Set Up and Onboard',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Guides for new laptops, Intune enrollment, LAPS and printers, plus an
+        onboarding path that gets new IT team members and interns up to speed.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Keep Systems Secure',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Notes on CrowdStrike, Meraki firewalls and VPN, vendor patches and the
+        HQ server room, so the team handles security the same way every time.
       </>
     ),
   },

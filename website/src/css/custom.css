@@ -57,3 +57,92 @@
 .sidebar-hidden {
   display: none;
 }
+
+/* Confluence-style page tree for the docs sidebar:
+   arrow on the left, folder icons for categories, page icons for docs */
+.theme-doc-sidebar-menu {
+  --tree-icon-size: 1.05rem;
+  --tree-caret-size: 1.5rem;
+  --tree-icon-folder: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E");
+  --tree-icon-folder-open: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
+  --tree-icon-page: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3Cpath d='M16 13H8'/%3E%3Cpath d='M16 17H8'/%3E%3Cpath d='M10 9H8'/%3E%3C/svg%3E");
+}
+
+.theme-doc-sidebar-menu .menu__link {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  color: var(--ifm-color-emphasis-800);
+  gap: 0.5rem;
+}
+
+.theme-doc-sidebar-menu .menu__link--active:not(.menu__link--sublist) {
+  font-weight: 600;
+}
+
+/* Every row at the same level gets the same left padding, so folders and
+   pages line up. The arrow is pinned in that padding, left of the icon. */
+.theme-doc-sidebar-menu .menu__link {
+  padding-left: calc(var(--tree-caret-size) + 0.25rem);
+}
+
+/* Categories that link to an index page: the arrow is a separate button */
+.theme-doc-sidebar-menu .menu__list-item-collapsible {
+  position: relative;
+}
+
+.theme-doc-sidebar-menu .menu__caret {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--tree-caret-size);
+  padding: 0;
+  justify-content: center;
+}
+
+.theme-doc-sidebar-menu .menu__list-item-collapsible .menu__link {
+  flex: 1;
+}
+
+/* Categories without an index page: the arrow is drawn on the link itself */
+.theme-doc-sidebar-menu .menu__link--sublist-caret {
+  position: relative;
+}
+
+.theme-doc-sidebar-menu .menu__link--sublist-caret::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin: -0.625rem 0 0;
+  width: var(--tree-caret-size);
+  min-width: 0;
+}
+
+/* Folder icon: closed when collapsed, open when expanded */
+.theme-doc-sidebar-menu .menu__link--sublist::before,
+.theme-doc-sidebar-item-link > .menu__link::before {
+  content: '';
+  flex-shrink: 0;
+  width: var(--tree-icon-size);
+  height: var(--tree-icon-size);
+  background-color: currentColor;
+  -webkit-mask: var(--tree-icon-folder-open) center / contain no-repeat;
+  mask: var(--tree-icon-folder-open) center / contain no-repeat;
+}
+
+.theme-doc-sidebar-menu .menu__list-item--collapsed > .menu__list-item-collapsible > .menu__link--sublist::before,
+.theme-doc-sidebar-menu .menu__list-item--collapsed > .menu__link--sublist::before {
+  -webkit-mask-image: var(--tree-icon-folder);
+  mask-image: var(--tree-icon-folder);
+}
+
+/* Page icon, indented to line up with folder names */
+.theme-doc-sidebar-item-link > .menu__link {
+  padding-left: calc(var(--tree-caret-size) + 0.25rem);
+}
+
+.theme-doc-sidebar-item-link > .menu__link::before {
+  -webkit-mask-image: var(--tree-icon-page);
+  mask-image: var(--tree-icon-page);
+}

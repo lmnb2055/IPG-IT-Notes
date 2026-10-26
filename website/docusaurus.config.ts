@@ -31,8 +31,8 @@ async function getFileLastUpdateInfo(filePath: string) {
 }
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'IT Documentation',
+  tagline: 'Clear documentations are cool',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -163,16 +163,16 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Inteplast Group Website',
+              href: 'https://www.inteplast.com/',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Inteplast Group Intranet',
+              href: 'https://ipg.inteplast.com/',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'IT Helpdesk Portal',
+              href: 'https://helpdesk.inteplast.com/home',
             },
           ],
         },
@@ -184,8 +184,14 @@ const config: Config = {
               to: '/blog',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              // Click copies the address; falls back to opening the mail app
+              // if the browser blocks clipboard access.
+              html: `<a href="mailto:itsupport@inteplast.com" class="footer__link-item" title="Click to copy itsupport@inteplast.com"
+                onclick="var a=this;if(!navigator.clipboard){return true;}event.preventDefault();
+                navigator.clipboard.writeText('itsupport@inteplast.com').then(function(){
+                  a.textContent='Copied: itsupport@inteplast.com';
+                  setTimeout(function(){a.textContent='IT Support Email';},2000);
+                },function(){location.href=a.href;});">IT Support Email</a>`,
             },
           ],
         },
